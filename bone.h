@@ -13,7 +13,7 @@ class Bone {
 		float length;
 		glm::mat4 M;
 
-		void add(Bone* b);
+		Bone* add(Bone* b);
 		void remove(Bone* b);
 		void detach();
 

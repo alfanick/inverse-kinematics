@@ -16,8 +16,8 @@
 float speed_x=0; //60 stopni/s
 float speed_y=0; //60 stopni/s
 int lastTime=0;
-float angle_x;
-float angle_y;
+float angle_x = -30;
+float angle_y = 0;
 float zoom = 1.0f;
 
 GLfloat mat_podstawa[] = { 60.0/255.0, 14.0/255.0, 14.0/255.0, 1.0 };
@@ -54,7 +54,10 @@ void drawBones(Bone* b) {
     glMaterialfv(GL_FRONT, GL_SPECULAR, mat_ramie);
 	GLUquadricObj* q = gluNewQuadric();
 
-	gluCylinder(q, 0.1f, 0.1f, b->length, 32, 32);
+  if (b->bones.empty())
+    gluCylinder(q, 0.1f, 0.1, b->length - 0.5f, 32, 32);
+  else
+	  gluCylinder(q, 0.1f, 0.1f, b->length, 32, 32);
 
 	gluDeleteQuadric(q);
 
@@ -64,7 +67,7 @@ void drawBones(Bone* b) {
   if (b->bones.empty()) {
     glPushMatrix();
 
-    glLoadMatrixf(glm::value_ptr(glm::translate(b->M, glm::vec3(0.0f, 0.0f, b->length))));
+    glLoadMatrixf(glm::value_ptr(glm::translate(b->M, glm::vec3(0.0f, 0.0f, b->length-0.5f))));
     glMaterialfv(GL_FRONT, GL_SPECULAR, mat_dlon);
     gluCylinder(q, 0.2f, 0.0f, 0.5f, 32,32);
 
@@ -107,6 +110,8 @@ void displayFrame(void) {
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
 */
+
+
 
 	glPushMatrix();
   glMaterialfv(GL_FRONT, GL_SPECULAR, mat_podstawa);
@@ -294,8 +299,8 @@ int main(int argc, char* argv[]) {
 	root->add(new Bone(3.5));
   root->rotate(-90,0,0);
 
-  root->bones[0]->add(new Bone(4));
-  root->bones[0]->bones[0]->add(new Bone(1));
+  root->bones[0]->add(new Bone(4))->rotate(0, -75, 0);
+  root->bones[0]->bones[0]->add(new Bone(1))->rotate(0, -45, 0);
   //root->bones[0]->bones[0]->M = glm::rotate(root->bones[0]->bones[0]->M, -80.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 
 

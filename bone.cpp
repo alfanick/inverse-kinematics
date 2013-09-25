@@ -1,8 +1,10 @@
 #include "bone.h"
 
-void Bone::add(Bone *b) {
+Bone* Bone::add(Bone *b) {
 	b->parent = this;
 	bones.push_back(b);
+
+  return b;
 }
 
 void Bone::remove(Bone *b) {
