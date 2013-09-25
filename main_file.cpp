@@ -7,6 +7,8 @@
 #include "tga.h"
 #include "cube.h"
 
+#include "bone.h"
+
 float speed_x=0; //60 stopni/s
 float speed_y=0; //60 stopni/s
 int lastTime=0;
@@ -35,7 +37,7 @@ void displayFrame(void) {
 
 	glm::mat4 M=glm::mat4(1.0f);
 	glLoadMatrixf(glm::value_ptr(V*M));
-
+/*
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
 	glVertexPointer(3,GL_FLOAT,0,cubeVertices);
@@ -43,6 +45,21 @@ void displayFrame(void) {
 	glDrawArrays(GL_QUADS,0,cubeVertexCount);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
+*/
+
+	glScalef(3.0f,0.2f,2.0f);
+	glutSolidCube(1.0f);
+/*
+	GLUquadricObj *quadratic;
+
+	quadratic = gluNewQuadric();
+
+	glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
+	gluCylinder(quadratic,0.1f,0.1f,3.0f,32,32);
+
+	gluDeleteQuadrac(quadratic);
+*/
+
 
 	glutSwapBuffers();
 }
