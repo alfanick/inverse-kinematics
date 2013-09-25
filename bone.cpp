@@ -30,9 +30,9 @@ glm::vec3 Bone::getEndPosition() {
     return glm::vec3(0.0f, 0.0f, 0.0f);
   }
   glm::vec3 parentPosition = parent->getEndPosition();
-  float x = parentPosition.x + length/cos(RAD(rotation.x));
-  float y = parentPosition.y + length/cos(RAD(rotation.y));
-  float z = parentPosition.z + length/cos(RAD(rotation.z));
+  float x = parentPosition.x + length*cos(RAD(rotation.x));
+  float y = parentPosition.y + length*cos(RAD(rotation.y));
+  float z = parentPosition.z + length*cos(RAD(rotation.z));
   return glm::vec3(x,y,z);
 }
 

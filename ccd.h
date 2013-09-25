@@ -6,9 +6,7 @@
 using namespace glm;
 
 namespace ccd {
-  findNewAngles(Bone *endEffector, vec3 target, int iterations = 10) {
-
-  }
+  void findNewAngles(Bone *endEffector, vec3 target, int iterations);
 }
 
 #endif
