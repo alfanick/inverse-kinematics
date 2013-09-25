@@ -1,4 +1,6 @@
 #include "bone.h"
+#define PI 3.14159265
+#define RAD(angle) (float)angle*PI/180.0
 
 Bone::Bone(float l) {
   length = l;
@@ -21,6 +23,17 @@ void Bone::remove(Bone *b) {
 	bones.erase(std::remove(bones.begin(), bones.end(), b), bones.end());
 
 	delete b;
+}
+
+glm::vec3 Bone::getEndPosition() {
+  if(parent == NULL) {
+    return glm::vec3(0.0f, 0.0f, 0.0f);
+  }
+  glm::vec3 parentPosition = parent->getEndPosition();
+  float x = parentPosition.x + length/cos(RAD(rotation.x));
+  float y = parentPosition.y + length/cos(RAD(rotation.y));
+  float z = parentPosition.z + length/cos(RAD(rotation.z));
+  return glm::vec3(x,y,z);
 }
 
 Bone* Bone::constraints(float nx, float mx, float ny, float my, float nz, float mz) {

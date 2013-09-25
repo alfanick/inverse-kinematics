@@ -280,6 +280,23 @@ void keyDown(unsigned char c, int x, int y) {
   }
 }
 
+void displayVec3(glm::vec3 vec) {
+  printf("x: %f, y: %f, z: %f\n", vec.x, vec.y, vec.z);
+}
+
+void keyUp(unsigned char c, int x, int y) {
+  if(c=='p') {
+    int id = 3;
+    Bone * currentBone = root->bone(111);
+    while(currentBone != NULL) {
+      printf("Bone %d\n\t", id);
+      displayVec3(currentBone->getEndPosition());
+      --id;
+      currentBone = currentBone->parent;
+    }
+  }
+}
+
 
 int main(int argc, char* argv[]) {
 	glutInit(&argc, argv);
@@ -296,6 +313,7 @@ int main(int argc, char* argv[]) {
   glutSpecialFunc(specKeyDown);
 	glutSpecialUpFunc(specKeyUp);
   glutKeyboardFunc(keyDown);
+  glutKeyboardUpFunc(keyUp);
 
   glShadeModel (GL_SMOOTH);
 
