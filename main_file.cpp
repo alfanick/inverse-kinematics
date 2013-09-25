@@ -20,6 +20,41 @@ float angle_x;
 float angle_y;
 float zoom = 1.0f;
 
+Bone* root;
+
+void drawBones(Bone* b) {
+	glPushMatrix();
+	glScalef(1.0f,1.0f,1.0f);
+
+	glm::mat4 previous = b->M;
+
+	if (b->parent != NULL) {
+    b->M = glm::rotate(b->M, b->rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
+    b->M = glm::rotate(b->M, b->rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+    b->M = glm::rotate(b->M, b->rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+
+    b->M = b->parent->M * b->M;
+
+    b->M = glm::translate(b->M, glm::vec3(0.0f, -b->parent->length, 0.0f));
+
+
+  }
+	glLoadMatrixf(glm::value_ptr(b->M));
+
+	GLUquadricObj* q = gluNewQuadric();
+
+	gluCylinder(q, 0.1f, 0.1f, b->length, 32, 10);
+
+	gluDeleteQuadric(q);
+
+	for (std::vector<Bone*>::iterator it = b->bones.begin(); it != b->bones.end(); it++) {
+		drawBones(*it);
+	}
+
+	b->M=previous;
+
+	glPopMatrix();
+}
 
 void displayFrame(void) {
 	glClearColor(0,0,0,1);
@@ -51,9 +86,15 @@ void displayFrame(void) {
 	glDisableClientState(GL_COLOR_ARRAY);
 */
 
+	glPushMatrix();
 	glScalef(3.0f,0.2f,2.0f);
 	glutSolidCube(1.0f);
-/*
+	glPopMatrix();
+
+  root->M = glm::rotate(M*V, -90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+
+	drawBones(root);
+		/*
 	GLUquadricObj *quadratic;
 
 	quadratic = gluNewQuadric();
@@ -120,10 +161,11 @@ void specKeyUp(int c, int x, int y) {
 void keyDown(unsigned char c, int x, int y) {
   switch(c) {
     case '-':
-      zoom += 0.01f;
+      zoom += 0.1f;
       break;
+    case '=':
     case '+':
-      zoom -= 0.01f;
+      zoom -= 0.1f;
       break;
   }
 }
@@ -144,9 +186,21 @@ int main(int argc, char* argv[]) {
 	glutSpecialUpFunc(specKeyUp);
   glutKeyboardFunc(keyDown);
 
-	//glEnable(GL_LIGHTING);
-	//glEnable(GL_LIGHT0);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
 	glEnable(GL_DEPTH_TEST);
+
+
+	root = new Bone(3.0f);
+	// pionowo
+	root->add(new Bone(2));
+  root->bones[0]->rotate(-90.0f, 0.0f, 0.0f);
+	//root->bones[0]->M = glm::rotate(root->bones[0]->M, -90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+
+  root->bones[0]->add(new Bone(3));
+	root->bones[0]->bones[0]->rotate(-80.0f, 0.0f, 0.0f);
+  //root->bones[0]->bones[0]->M = glm::rotate(root->bones[0]->bones[0]->M, -80.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+
 
         glutMainLoop();
         return 0;

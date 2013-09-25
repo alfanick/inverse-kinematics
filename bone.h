@@ -2,6 +2,7 @@
 #define BONE_H
 
 #include <vector>
+#include <algorithm>
 #include "glm/glm.hpp"
 
 class Bone {
@@ -16,8 +17,13 @@ class Bone {
 		void remove(Bone* b);
 		void detach();
 
+    void setRotate(float x, float y, float z);
+    void rotate(float dx, float dy, float dz);
+
+    glm::vec3 rotation;
+
 		Bone() { Bone(0); };
-		Bone(float l)  : length(l) { };
+		Bone(float l)  : length(l) { M = glm::mat4(1.0f); parent = NULL; rotation = glm::vec3(0.0f); };
 		~Bone();
 };
 
