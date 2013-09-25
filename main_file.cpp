@@ -89,8 +89,8 @@ void displayFrame(void) {
   glm::vec3 cameraEye = glm::vec3(0.0f, 0.0f, -10.0f);
   glm::vec3 cameraNose = glm::vec3(0.0f, 1.0f, 0.0f);
 	glm::mat4 V=glm::lookAt(cameraEye, cameraCenter, cameraNose);
-  V = glm::rotate(V, angle_y, glm::vec3(0.0f, 1.0f, 0.0f));
   V = glm::rotate(V, angle_x, glm::vec3(1.0f, 0.0f, 0.0f));
+  V = glm::rotate(V, angle_y, glm::vec3(0.0f, 1.0f, 0.0f));
 
 	glm::mat4 P=glm::perspective(50.0f*zoom, 1.0f, 1.0f, 50.0f);
 
