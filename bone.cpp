@@ -28,11 +28,13 @@ void Bone::checkConstraints(float x, float y, float z) {
 }
 
 Bone* Bone::setRotate(float x, float y, float z) {
-  checkConstraints(x, y, z);
+  float lx, ly, lz;
 
-  rotation.x = fmod(x, 360.0f);
-  rotation.y = fmod(y, 360.0f);
-  rotation.z = fmod(z, 360.0f);
+  checkConstraints(lx = fmod(x, 360.0f), ly = fmod(y, 360.f), lz = fmod(z, 360.0f));
+
+  rotation.x = lx;
+  rotation.y = ly;
+  rotation.z = lz;
 
   return this;
 }
