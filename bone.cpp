@@ -26,6 +26,8 @@ void Bone::remove(Bone *b) {
 Bone* Bone::constraints(float nx, float mx, float ny, float my, float nz, float mz) {
   constraint[0] = glm::vec3(nx, ny, nz);
   constraint[1] = glm::vec3(mx, my, mz);
+
+  return this;
 }
 
 void Bone::checkConstraints(float x, float y, float z) {
