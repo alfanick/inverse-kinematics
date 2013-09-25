@@ -106,6 +106,11 @@ class Bone {
     Bone* rotate(float dx, float dy, float dz);
 
     /**
+     * @return 3d position of bone's end in glm::vec3
+     */
+    glm::vec3 getEndPosition();
+
+    /**
      * Find Bone using its unique identifier. On every joint there
      * may be maximum 8 bones identified using this method. Should
      * be used once in the while to obtain the pointer to the bone.
