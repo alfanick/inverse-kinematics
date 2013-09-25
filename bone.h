@@ -27,6 +27,8 @@ class Bone {
     Bone* setRotate(float x, float y, float z);
     Bone* rotate(float dx, float dy, float dz);
 
+    Bone* bone(unsigned long long id);
+
     glm::vec3 rotation;
     glm::vec3 constraint[2];
 

@@ -50,6 +50,14 @@ void Bone::detach() {
 	parent = NULL;
 }
 
+Bone* Bone::bone(unsigned long long id) {
+  if (id < 10) {
+    return bones[id-1];
+  } else {
+    return bones[id % 10 - 1]->bone(id/10);
+  }
+}
+
 Bone::~Bone() {
 	for (std::vector<Bone*>::iterator it = bones.begin(); it != bones.end(); it++) {
 		delete *it;

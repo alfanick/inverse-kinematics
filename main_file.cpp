@@ -301,6 +301,9 @@ int main(int argc, char* argv[]) {
       ->add(new Bone(4))->rotate(0, -75, 0)
       ->add(new Bone(1))->rotate(0, -45, 0);
 
+  assert(root->bone(1) == root->bones[0]);
+  assert(root->bone(11) == root->bones[0]->bones[0]);
+  assert(root->bone(111) == root->bones[0]->bones[0]->bones[0]);
 
         glutMainLoop();
 
