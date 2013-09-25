@@ -126,13 +126,7 @@ class Bone {
      *
      * @param l Length
      */
-		Bone(float l)  : length(l) {
-      M = glm::mat4(1.0f);
-      parent = NULL;
-      rotation = glm::vec3(0.0f);
-      constraint[0] = glm::vec3(-360.0f);
-      constraint[1] = glm::vec3(360.0f);
-    };
+		Bone(float l);
 
     /**
      * Destroy Bone and its children attached to joint - does

@@ -1,5 +1,14 @@
 #include "bone.h"
 
+Bone::Bone(float l) {
+  length = l;
+  M = glm::mat4(1.0f);
+  parent = NULL;
+  rotation = glm::vec3(0.0f);
+  constraint[0] = glm::vec3(-360.0f);
+  constraint[1] = glm::vec3(360.0f);
+};
+
 Bone* Bone::add(Bone *b) {
 	b->parent = this;
 	bones.push_back(b);
