@@ -205,6 +205,7 @@ void specKeyUp(int c, int x, int y) {
 }
 
 void keyDown(unsigned char c, int x, int y) {
+  try {
   switch(c) {
     case '-':
       zoom += 0.5f;
@@ -273,6 +274,9 @@ void keyDown(unsigned char c, int x, int y) {
       break;
 
 
+  }
+  } catch (ConstraintException* e) {
+    printf("Cannot move further!\n");
   }
 }
 
