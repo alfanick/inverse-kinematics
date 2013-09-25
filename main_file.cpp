@@ -21,16 +21,35 @@ float angle_y = 0;
 float zoom = 15.0f;
 float cdx,cdy;
 
+glm::vec3 target;
+
 GLfloat mat_podstawa[] = { 60.0/255.0, 14.0/255.0, 14.0/255.0, 1.0 };
 GLfloat mat_ramie[] = {248.0/255.0, 233.0/255.0, 202.0/255.0, 1.0};
 GLfloat mat_staw[] = {222.0/255.0, 197.0/255.0, 62.0/255.0, 1.0};
 GLfloat mat_dlon[] = {221.0/255.0,74.0/255.0,54.0/255.0, 1.0};
+GLfloat mat_cel[] = {106.0/255.0,169.0/255.0,159.0/255.0, 1.0};
 
 Bone* root;
 float r_up = 60.0f;
 
+void randomizeTarget() {
+  target.x = float(rand() % 10000) / 1000.0 - 5.0;
+  target.y = float(rand() % 10000) / 1000.0 - 5.0;
+  target.z = float(rand() % 10000) / 1000.0 - 5.0;
+
+  GLfloat light_position[] = { target.x, target.y, target.z, 1.0 };
+
+
+  glLightfv(GL_LIGHT1, GL_POSITION, light_position);
+  mat_cel[3] = 0.5;
+  glLightfv(GL_LIGHT1, GL_DIFFUSE, mat_cel);
+  mat_cel[3] = 1.0;
+
+}
+
 void drawBones(Bone* b) {
 	glPushMatrix();
+  GLfloat s[] = {0};
 
 	glm::mat4 previous = b->M;
 
@@ -48,15 +67,20 @@ void drawBones(Bone* b) {
   glLoadMatrixf(glm::value_ptr(b->M));
 
   if (b->parent != NULL) {
+    s[0] = 250;
     glMaterialfv(GL_FRONT, GL_SPECULAR, mat_staw);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_staw);
+    glMaterialfv(GL_FRONT, GL_SHININESS, s);
     glutSolidSphere(0.2f, 32,32);
   }
 
     glMaterialfv(GL_FRONT, GL_SPECULAR, mat_ramie);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_ramie);
+    s[0] = 11;
+    glMaterialfv(GL_FRONT, GL_SHININESS, s);
 	GLUquadricObj* q = gluNewQuadric();
-
   if (b->bones.empty())
-    gluCylinder(q, 0.1f, 0.1, b->length - 0.5f, 32, 32);
+    gluCylinder(q, 0.1f, 0.1f, b->length - 0.5f, 32, 32);
   else
 	  gluCylinder(q, 0.1f, 0.1f, b->length, 32, 32);
 
@@ -70,6 +94,10 @@ void drawBones(Bone* b) {
 
     glLoadMatrixf(glm::value_ptr(glm::translate(b->M, glm::vec3(0.0f, 0.0f, b->length-0.5f))));
     glMaterialfv(GL_FRONT, GL_SPECULAR, mat_dlon);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_dlon);
+    s[0] = 250;
+    glMaterialfv(GL_FRONT, GL_SHININESS, s);
+
     gluCylinder(q, 0.2f, 0.0f, 0.5f, 32,32);
 
     glPopMatrix();
@@ -112,11 +140,27 @@ void displayFrame(void) {
 	glDisableClientState(GL_COLOR_ARRAY);
 */
 
+  GLfloat s[] = {128};
+  glPushMatrix();
+  glMaterialfv(GL_FRONT, GL_SPECULAR, mat_cel);
+  glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_cel);
+  glMaterialfv(GL_FRONT, GL_SHININESS, s);
+  mat_cel[3] = 0.5;
+  glMaterialfv(GL_FRONT, GL_EMISSION, mat_cel);
+  mat_cel[3] = 1.0;
+  glLoadMatrixf(glm::value_ptr(glm::translate(M*V, target)));
+  glutSolidSphere(0.1f, 32, 32);
+  glPopMatrix();
 
 
+  GLfloat t[] = {0.0,0.0, 0.0,1.0};
 	glPushMatrix();
   glMaterialfv(GL_FRONT, GL_SPECULAR, mat_podstawa);
-	glScalef(3.0f,0.2f,2.0f);
+  glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_podstawa);
+  s[0] = 0;
+  glMaterialfv(GL_FRONT, GL_SHININESS, s);
+	glMaterialfv(GL_FRONT, GL_EMISSION, t);
+  glScalef(3.0f,0.2f,2.0f);
 	glutSolidCube(1.0f);
 	glPopMatrix();
 
@@ -272,8 +316,9 @@ void keyDown(unsigned char c, int x, int y) {
     case 'd':
       root->bone(1)->rotate(0.0f, 0.0f, +1.0f);
       break;
-
-
+    case ' ':
+      randomizeTarget();
+      break;
   }
   } catch (ConstraintException* e) {
     printf("Cannot move further!\n");
@@ -282,6 +327,7 @@ void keyDown(unsigned char c, int x, int y) {
 
 
 int main(int argc, char* argv[]) {
+  srand(time(0));
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 	glutInitWindowSize(800,800);
@@ -300,9 +346,9 @@ int main(int argc, char* argv[]) {
   glShadeModel (GL_SMOOTH);
 
   GLfloat light_ambient[] = {0.1, 0.1, 0.1, 1.0};
-  GLfloat light_position[] = { 0.0, 0.0, 0.0, 1.0 };
-  GLfloat light_diffuse[] = { 0.3, 0.3, 0.3, 1.0 };
-  GLfloat light_specular[] = { 0.3, 0.3, 0.3, 1.0 };
+  GLfloat light_position[] = { 1.0, 0.0, 0.0, 1.0 };
+  GLfloat light_diffuse[] = { 0.5, 0.5, 0.5, 1.0 };
+  GLfloat light_specular[] = { 0.5, 0.5, 0.5, 1.0 };
 
 
   glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
@@ -310,11 +356,14 @@ int main(int argc, char* argv[]) {
   glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
   glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
 
+  randomizeTarget();
+
 
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
-	glEnable(GL_DEPTH_TEST);
+  glEnable(GL_LIGHT1);
 
+	glEnable(GL_DEPTH_TEST);
 
 	root = new Bone(0.0f);
 
@@ -326,7 +375,7 @@ int main(int argc, char* argv[]) {
   assert(root->bone(11) == root->bones[0]->bones[0]);
   assert(root->bone(111) == root->bones[0]->bones[0]->bones[0]);
 
-        glutMainLoop();
+  glutMainLoop();
 
   delete root;
 
