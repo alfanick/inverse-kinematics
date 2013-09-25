@@ -295,13 +295,11 @@ int main(int argc, char* argv[]) {
 
 
 	root = new Bone(0.0f);
-	// pionowo
-	root->add(new Bone(3.5));
-  root->rotate(-90,0,0);
+  root->rotate(90,0,0);
 
-  root->bones[0]->add(new Bone(4))->rotate(0, -75, 0);
-  root->bones[0]->bones[0]->add(new Bone(1))->rotate(0, -45, 0);
-  //root->bones[0]->bones[0]->M = glm::rotate(root->bones[0]->bones[0]->M, -80.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+  root->add(new Bone(3.5))->constraints(-90,90, -90,90, -360,360)->rotate(0, 0, 0)
+      ->add(new Bone(4))->rotate(0, -75, 0)
+      ->add(new Bone(1))->rotate(0, -45, 0);
 
 
         glutMainLoop();

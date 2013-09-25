@@ -14,16 +14,33 @@ void Bone::remove(Bone *b) {
 	delete b;
 }
 
-void Bone::setRotate(float x, float y, float z) {
-  rotation.x = x;
-  rotation.y = y;
-  rotation.z = z;
+Bone* Bone::constraints(float nx, float mx, float ny, float my, float nz, float mz) {
+  constraint[0] = glm::vec3(nx, ny, nz);
+  constraint[1] = glm::vec3(mx, my, mz);
 }
 
-void Bone::rotate(float dx, float dy, float dz) {
-  rotation.x += dx;
-  rotation.y += dy;
-  rotation.z += dz;
+void Bone::checkConstraints(float x, float y, float z) {
+  if (x < constraint[0].x || x > constraint[1].x ||
+      y < constraint[0].y || y > constraint[1].y ||
+      z < constraint[0].z || z > constraint[1].z) {
+    throw new ConstraintException();
+  }
+}
+
+Bone* Bone::setRotate(float x, float y, float z) {
+  checkConstraints(x, y, z);
+
+  rotation.x = fmod(x, 360.0f);
+  rotation.y = fmod(y, 360.0f);
+  rotation.z = fmod(z, 360.0f);
+
+  return this;
+}
+
+Bone* Bone::rotate(float dx, float dy, float dz) {
+  return setRotate(rotation.x+dx, rotation.y+dy, rotation.z+dx);
+
+  return this;
 }
 
 void Bone::detach() {
