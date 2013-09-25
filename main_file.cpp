@@ -23,13 +23,13 @@ float zoom = 1.0f;
 GLfloat mat_podstawa[] = { 60.0/255.0, 14.0/255.0, 14.0/255.0, 1.0 };
 GLfloat mat_ramie[] = {248.0/255.0, 233.0/255.0, 202.0/255.0, 1.0};
 GLfloat mat_staw[] = {222.0/255.0, 197.0/255.0, 62.0/255.0, 1.0};
+GLfloat mat_dlon[] = {221.0/255.0,74.0/255.0,54.0/255.0, 1.0};
 
 Bone* root;
 float r_up = 60.0f;
 
 void drawBones(Bone* b) {
 	glPushMatrix();
-	glScalef(1.0f,1.0f,1.0f);
 
 	glm::mat4 previous = b->M;
 
@@ -51,15 +51,25 @@ void drawBones(Bone* b) {
     glutSolidSphere(0.2f, 32,32);
   }
 
-
     glMaterialfv(GL_FRONT, GL_SPECULAR, mat_ramie);
 	GLUquadricObj* q = gluNewQuadric();
+
 	gluCylinder(q, 0.1f, 0.1f, b->length, 32, 32);
 
 	gluDeleteQuadric(q);
 
   glPopMatrix();
 
+
+  if (b->bones.empty()) {
+    glPushMatrix();
+
+    glLoadMatrixf(glm::value_ptr(glm::translate(b->M, glm::vec3(0.0f, 0.0f, b->length))));
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_dlon);
+    gluCylinder(q, 0.2f, 0.0f, 0.5f, 32,32);
+
+    glPopMatrix();
+  }
 
 	for (std::vector<Bone*>::iterator it = b->bones.begin(); it != b->bones.end(); it++) {
 		drawBones(*it);
@@ -180,41 +190,62 @@ void keyDown(unsigned char c, int x, int y) {
     case '+':
       zoom /= 1.05f;
       break;
-    case 'q':
+
+    case 'u':
+      root->bones[0]->bones[0]->bones[0]->rotate(-1.0f, 0.0f, 0.0f);
+      break;
+    case 'j':
+      root->bones[0]->bones[0]->bones[0]->rotate(+1.0f, 0.0f, 0.0f);
+      break;
+    case 'i':
+      root->bones[0]->bones[0]->bones[0]->rotate(0.0f, -1.0f, 0.0f);
+      break;
+    case 'k':
+      root->bones[0]->bones[0]->bones[0]->rotate(0.0f, +1.0f, 0.0f);
+      break;
+     case 'o':
+      root->bones[0]->bones[0]->bones[0]->rotate(0.0f, 0.0f, -1.0f);
+      break;
+    case 'l':
+      root->bones[0]->bones[0]->bones[0]->rotate(0.0f, 0.0f, +1.0f);
+      break;
+
+
+    case 'r':
       root->bones[0]->bones[0]->rotate(-1.0f, 0.0f, 0.0f);
       break;
-    case 'a':
+    case 'f':
       root->bones[0]->bones[0]->rotate(+1.0f, 0.0f, 0.0f);
       break;
-    case 'w':
+    case 't':
       root->bones[0]->bones[0]->rotate(0.0f, -1.0f, 0.0f);
       break;
-    case 's':
+    case 'g':
       root->bones[0]->bones[0]->rotate(0.0f, +1.0f, 0.0f);
       break;
-     case 'e':
+     case 'y':
       root->bones[0]->bones[0]->rotate(0.0f, 0.0f, -1.0f);
       break;
-    case 'd':
+    case 'h':
       root->bones[0]->bones[0]->rotate(0.0f, 0.0f, +1.0f);
       break;
 
-    case 'r':
+    case 'q':
       root->bones[0]->rotate(-1.0f, 0.0f, 0.0f);
       break;
-    case 'f':
+    case 'a':
       root->bones[0]->rotate(+1.0f, 0.0f, 0.0f);
       break;
-    case 't':
+    case 'w':
       root->bones[0]->rotate(0.0f, -1.0f, 0.0f);
       break;
-    case 'g':
+    case 's':
       root->bones[0]->rotate(0.0f, +1.0f, 0.0f);
       break;
-     case 'y':
+     case 'e':
       root->bones[0]->rotate(0.0f, 0.0f, -1.0f);
       break;
-    case 'h':
+    case 'd':
       root->bones[0]->rotate(0.0f, 0.0f, +1.0f);
       break;
 
@@ -258,14 +289,13 @@ int main(int argc, char* argv[]) {
 	glEnable(GL_DEPTH_TEST);
 
 
-	root = new Bone(3.0f);
+	root = new Bone(0.0f);
 	// pionowo
-	root->add(new Bone(2));
-  root->bones[0]->rotate(-40.0f, 0.0f, 0.0f);
-	//root->bones[0]->M = glm::rotate(root->bones[0]->M, -90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	root->add(new Bone(3.5));
+  root->rotate(-90,0,0);
 
-  root->bones[0]->add(new Bone(3));
-	root->bones[0]->bones[0]->setRotate(-0.0f, 0.0f, 0.0f);
+  root->bones[0]->add(new Bone(4));
+  root->bones[0]->bones[0]->add(new Bone(1));
   //root->bones[0]->bones[0]->M = glm::rotate(root->bones[0]->bones[0]->M, -80.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 
 
