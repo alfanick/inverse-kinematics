@@ -1,7 +1,7 @@
 #ifndef DETAILED_CUBE_H
 #define DETAILED_CUBE_H
 
-#include <GL/glew.h>
+#include <GLUT/glut.h>
 
 //Zadeklaruj globalnie
 extern float *geomVertices;
@@ -14,4 +14,4 @@ void freeCube();
 void drawCube();
 
 
-#endif 
+#endif
