@@ -1,5 +1,9 @@
-//#include <GL/glew.h>
-#include <GLUT/glut.h>
+#ifdef KOT
+  #include <GL/glut.h>
+#else
+  #include <GLUT/glut.h>
+#endif
+
 #include <stdio.h> //Przydatne do wypisywania komunikatów na konsoli
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
