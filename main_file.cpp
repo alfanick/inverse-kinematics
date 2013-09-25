@@ -29,13 +29,14 @@ void drawBones(Bone* b) {
 	glm::mat4 previous = b->M;
 
 	if (b->parent != NULL) {
-    b->M = glm::rotate(b->M, b->rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
-    b->M = glm::rotate(b->M, b->rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
-    b->M = glm::rotate(b->M, b->rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+
+    b->M = glm::translate(b->M, glm::vec3(0.0f, 0.0f, b->parent->length));
+
+    b->M = glm::rotate(b->M, b->rotation.x, glm::vec3(b->M*glm::vec4(1.0f, 0.0f, 0.0f, 0.0f)));
+    b->M = glm::rotate(b->M, b->rotation.y, glm::vec3(b->M*glm::vec4(0.0f, 1.0f, 0.0f, 0.0f)));
+    b->M = glm::rotate(b->M, b->rotation.z, glm::vec3(b->M*glm::vec4(0.0f, 0.0f, 1.0f, 0.0f)));
 
     b->M = b->parent->M * b->M;
-
-    b->M = glm::translate(b->M, glm::vec3(0.0f, -b->parent->length, 0.0f));
 
 
   }
@@ -194,7 +195,7 @@ int main(int argc, char* argv[]) {
 	root = new Bone(3.0f);
 	// pionowo
 	root->add(new Bone(2));
-  root->bones[0]->rotate(-90.0f, 0.0f, 0.0f);
+  root->bones[0]->rotate(-40.0f, 0.0f, 0.0f);
 	//root->bones[0]->M = glm::rotate(root->bones[0]->M, -90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 
   root->bones[0]->add(new Bone(3));
