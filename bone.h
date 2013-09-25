@@ -107,7 +107,8 @@ class Bone {
 
     /**
      * Find Bone using its unique identifier. On every joint there
-     * may be maximum 8 bones identified using this method.
+     * may be maximum 8 bones identified using this method. Should
+     * be used once in the while to obtain the pointer to the bone.
      *
      * The rightmost digit represents the current joint index
      * (i.e. 1 will return first bone, 4 will return 4th bone - vector index 3).
@@ -134,7 +135,8 @@ class Bone {
     };
 
     /**
-     * Destroy Bone and its children attached to joint
+     * Destroy Bone and its children attached to joint - does
+     * release memory of its children
      */
 		~Bone();
 };

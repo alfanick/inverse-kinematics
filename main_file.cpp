@@ -197,61 +197,61 @@ void keyDown(unsigned char c, int x, int y) {
       break;
 
     case 'u':
-      root->bones[0]->bones[0]->bones[0]->rotate(-1.0f, 0.0f, 0.0f);
+      root->bone(111)->rotate(-1.0f, 0.0f, 0.0f);
       break;
     case 'j':
-      root->bones[0]->bones[0]->bones[0]->rotate(+1.0f, 0.0f, 0.0f);
+      root->bone(111)->rotate(+1.0f, 0.0f, 0.0f);
       break;
     case 'i':
-      root->bones[0]->bones[0]->bones[0]->rotate(0.0f, -1.0f, 0.0f);
+      root->bone(111)->rotate(0.0f, -1.0f, 0.0f);
       break;
     case 'k':
-      root->bones[0]->bones[0]->bones[0]->rotate(0.0f, +1.0f, 0.0f);
+      root->bone(111)->rotate(0.0f, +1.0f, 0.0f);
       break;
      case 'o':
-      root->bones[0]->bones[0]->bones[0]->rotate(0.0f, 0.0f, -1.0f);
+      root->bone(111)->rotate(0.0f, 0.0f, -1.0f);
       break;
     case 'l':
-      root->bones[0]->bones[0]->bones[0]->rotate(0.0f, 0.0f, +1.0f);
+      root->bone(111)->rotate(0.0f, 0.0f, +1.0f);
       break;
 
 
     case 'r':
-      root->bones[0]->bones[0]->rotate(-1.0f, 0.0f, 0.0f);
+      root->bone(11)->rotate(-1.0f, 0.0f, 0.0f);
       break;
     case 'f':
-      root->bones[0]->bones[0]->rotate(+1.0f, 0.0f, 0.0f);
+      root->bone(11)->rotate(+1.0f, 0.0f, 0.0f);
       break;
     case 't':
-      root->bones[0]->bones[0]->rotate(0.0f, -1.0f, 0.0f);
+      root->bone(11)->rotate(0.0f, -1.0f, 0.0f);
       break;
     case 'g':
-      root->bones[0]->bones[0]->rotate(0.0f, +1.0f, 0.0f);
+      root->bone(11)->rotate(0.0f, +1.0f, 0.0f);
       break;
      case 'y':
-      root->bones[0]->bones[0]->rotate(0.0f, 0.0f, -1.0f);
+      root->bone(11)->rotate(0.0f, 0.0f, -1.0f);
       break;
     case 'h':
-      root->bones[0]->bones[0]->rotate(0.0f, 0.0f, +1.0f);
+      root->bone(11)->rotate(0.0f, 0.0f, +1.0f);
       break;
 
     case 'q':
-      root->bones[0]->rotate(-1.0f, 0.0f, 0.0f);
+      root->bone(1)->rotate(-1.0f, 0.0f, 0.0f);
       break;
     case 'a':
-      root->bones[0]->rotate(+1.0f, 0.0f, 0.0f);
+      root->bone(1)->rotate(+1.0f, 0.0f, 0.0f);
       break;
     case 'w':
-      root->bones[0]->rotate(0.0f, -1.0f, 0.0f);
+      root->bone(1)->rotate(0.0f, -1.0f, 0.0f);
       break;
     case 's':
-      root->bones[0]->rotate(0.0f, +1.0f, 0.0f);
+      root->bone(1)->rotate(0.0f, +1.0f, 0.0f);
       break;
      case 'e':
-      root->bones[0]->rotate(0.0f, 0.0f, -1.0f);
+      root->bone(1)->rotate(0.0f, 0.0f, -1.0f);
       break;
     case 'd':
-      root->bones[0]->rotate(0.0f, 0.0f, +1.0f);
+      root->bone(1)->rotate(0.0f, 0.0f, +1.0f);
       break;
 
 
