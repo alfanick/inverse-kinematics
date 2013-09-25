@@ -18,7 +18,8 @@ float speed_y=0; //60 stopni/s
 int lastTime=0;
 float angle_x = -30;
 float angle_y = 0;
-float zoom = 1.0f;
+float zoom = 15.0f;
+float cdx,cdy;
 
 GLfloat mat_podstawa[] = { 60.0/255.0, 14.0/255.0, 14.0/255.0, 1.0 };
 GLfloat mat_ramie[] = {248.0/255.0, 233.0/255.0, 202.0/255.0, 1.0};
@@ -85,14 +86,14 @@ void displayFrame(void) {
 	glClearColor(0,0,0,1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  glm::vec3 cameraCenter = glm::vec3(0.0f, 2.0f, 0.0f);
-  glm::vec3 cameraEye = glm::vec3(0.0f, 0.0f, -10.0f);
+  glm::vec3 cameraCenter = glm::vec3(0.0f+cdx, 2.0f+cdy, 0.0);
+  glm::vec3 cameraEye = glm::vec3(0.0f, 1.0f, -zoom);
   glm::vec3 cameraNose = glm::vec3(0.0f, 1.0f, 0.0f);
 	glm::mat4 V=glm::lookAt(cameraEye, cameraCenter, cameraNose);
   V = glm::rotate(V, angle_x, glm::vec3(1.0f, 0.0f, 0.0f));
   V = glm::rotate(V, angle_y, glm::vec3(0.0f, 1.0f, 0.0f));
 
-	glm::mat4 P=glm::perspective(50.0f*zoom, 1.0f, 1.0f, 50.0f);
+	glm::mat4 P=glm::perspective(50.0f, 1.0f, 1.0f, 50.0f);
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrixf(glm::value_ptr(P));
@@ -153,19 +154,36 @@ void nextFrame(void) {
 }
 
 void specKeyDown(int c, int x, int y) {
-  switch (c) {
-    case GLUT_KEY_LEFT:
-      speed_y=60;
-      break;
-    case GLUT_KEY_RIGHT:
-      speed_y=-60;
-      break;
-    case GLUT_KEY_UP:
-      speed_x=60;
-      break;
-    case GLUT_KEY_DOWN:
-      speed_x=-60;
-      break;
+  if (glutGetModifiers() == GLUT_ACTIVE_SHIFT) {
+    switch (c) {
+      case GLUT_KEY_LEFT:
+        cdx -= 0.25;
+        break;
+      case GLUT_KEY_RIGHT:
+        cdx += 0.25;
+        break;
+      case GLUT_KEY_UP:
+        cdy -= 0.25;
+        break;
+      case GLUT_KEY_DOWN:
+        cdy += 0.25;
+        break;
+    }
+  } else {
+    switch (c) {
+      case GLUT_KEY_LEFT:
+        speed_y=60;
+        break;
+      case GLUT_KEY_RIGHT:
+        speed_y=-60;
+        break;
+      case GLUT_KEY_UP:
+        speed_x=60;
+        break;
+      case GLUT_KEY_DOWN:
+        speed_x=-60;
+        break;
+    }
   }
 }
 
@@ -189,11 +207,11 @@ void specKeyUp(int c, int x, int y) {
 void keyDown(unsigned char c, int x, int y) {
   switch(c) {
     case '-':
-      zoom *= 1.05f;
+      zoom += 0.5f;
       break;
     case '=':
     case '+':
-      zoom /= 1.05f;
+      zoom -= 0.5f;
       break;
 
     case 'u':
