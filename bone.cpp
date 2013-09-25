@@ -38,7 +38,7 @@ Bone* Bone::setRotate(float x, float y, float z) {
 }
 
 Bone* Bone::rotate(float dx, float dy, float dz) {
-  return setRotate(rotation.x+dx, rotation.y+dy, rotation.z+dx);
+  return setRotate(rotation.x+dx, rotation.y+dy, rotation.z+dz);
 
   return this;
 }
