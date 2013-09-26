@@ -11,7 +11,7 @@ void ccd::findNewAngles(Bone *endEffector, vec3 target, int iterations) {
       vec4 endPosition = currentBone->getEndPosition();
       vec4 startPosition = currentBone->parent->getEndPosition();
       vec3 toTarget = normalize(vec3(target.x-startPosition.x, target.y-startPosition.y, target.z-startPosition.z));
-      vec3 toEnd = normalize(vec3(endPosition.x-startPosition.x, endPosition.y-startPosition.y, endPosition.y));
+      vec3 toEnd = normalize(vec3(endPosition.x-startPosition.x, endPosition.y-startPosition.y, endPosition.z-startPosition.z));
       float cosine = dot(toEnd, toTarget);
       float angle = ANGLE(acos(cosine));
       if(currentBone == endEffector) {
@@ -21,15 +21,7 @@ void ccd::findNewAngles(Bone *endEffector, vec3 target, int iterations) {
         printf("angle: %f\n", angle);
       }
       if(cosine < 0.99) {
-        // float delta_x = ANGLE(acos(toTarget.x)) - ANGLE(acos(toEnd.x));
-        // float delta_y = ANGLE(acos(toTarget.y)) - ANGLE(acos(toEnd.y));
-        // float delta_z = ANGLE(acos(toTarget.z)) - ANGLE(acos(toEnd.z));
-
-        // currentBone->rotateMax(delta_x, delta_y, delta_z);
-
-        vec3 crossResult = cross(toEnd, toTarget);
-        crossResult = normalize(crossResult);
-        quat rot = angleAxis(angle, crossResult);
+        quat rot = ccd::rotationBetweenVectors(toTarget, toEnd);
         rot = normalize(rot);
         glm::vec3 euler = glm::eulerAngles(rot) ;
         currentBone->rotateMax(euler.x, euler.y, euler.z);
@@ -44,4 +36,37 @@ void ccd::findNewAngles(Bone *endEffector, vec3 target, int iterations) {
       currentBone = currentBone->parent;
     }
   }
+}
+
+quat ccd::rotationBetweenVectors(vec3 start, vec3 dest){
+    start = normalize(start);
+    dest = normalize(dest);
+ 
+    float cosTheta = dot(start, dest);
+    vec3 rotationAxis;
+ 
+    if (cosTheta < -1 + 0.001f){
+        // special case when vectors in opposite directions:
+        // there is no "ideal" rotation axis
+        // So guess one; any will do as long as it's perpendicular to start
+        rotationAxis = cross(vec3(0.0f, 0.0f, 1.0f), start);
+        if (length2(rotationAxis) < 0.01 ) // bad luck, they were parallel, try again!
+            rotationAxis = cross(vec3(1.0f, 0.0f, 0.0f), start);
+ 
+        rotationAxis = normalize(rotationAxis);
+        return angleAxis(180.0f, rotationAxis);
+    }
+ 
+    rotationAxis = cross(start, dest);
+ 
+    float s = sqrt( (1+cosTheta)*2 );
+    float invs = 1 / s;
+ 
+    return quat(
+        s * 0.5f, 
+        rotationAxis.x * invs,
+        rotationAxis.y * invs,
+        rotationAxis.z * invs
+    );
+ 
 }

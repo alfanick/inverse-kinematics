@@ -82,12 +82,12 @@ Bone* Bone::setRotate(float x, float y, float z) {
 }
 
 Bone* Bone::rotateMax(float dx, float dy, float dz) {
-  if(dx > constraint[1].x) dx = constraint[1].x;
-  if(dx < constraint[0].x) dx = constraint[0].x;
-  if(dy > constraint[1].y) dy = constraint[1].y;
-  if(dy < constraint[0].y) dy = constraint[0].y;
-  if(dz > constraint[1].z) dz = constraint[1].z;
-  if(dz < constraint[0].z) dz = constraint[0].z;
+  if(dx+rotation.x > constraint[1].x) dx = constraint[1].x-rotation.x;
+  if(dx+rotation.x < constraint[0].x) dx = constraint[0].x-rotation.x;
+  if(dy+rotation.y > constraint[1].y) dy = constraint[1].y-rotation.y;
+  if(dy+rotation.y < constraint[0].y) dy = constraint[0].y-rotation.y;
+  if(dz+rotation.z > constraint[1].z) dz = constraint[1].z-rotation.z;
+  if(dz+rotation.z < constraint[0].z) dz = constraint[0].z-rotation.z;
   rotate(dx,dy,dz);
   return this;
 }
