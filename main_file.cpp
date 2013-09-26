@@ -457,17 +457,17 @@ int main(int argc, char* argv[]) {
 	animation->set(root)
 					 ->keyframe()
 
-					 ->move(root->bone(11), glm::vec3(0.0f, 30.0f, 0.0f))
+					 ->move(root->bone(11), glm::vec3(0.0f, -30.0f, 0.0f))
 					 ->move(root->bone(1), glm::vec3(0.0f, -45.0f, 0.0f))
 					 ->keyframe()
 
 					 ->move(root->bone(1), glm::vec3(0.0f, +45.0f, 0.0f))
 					 ->keyframe()
 
-					 ->move(root->bone(11), glm::vec3(0.0f, -30.0f, 0.0f))
+					 ->move(root->bone(11), glm::vec3(0.0f, +30.0f, 0.0f))
 					 ->keyframe()
 
-					 ->move(root->bone(1), glm::vec3(0.0f, 0.0f, 45.0f))
+					 ->move(root->bone(1), glm::vec3(0.0f, 0.0f, -45.0f))
 					 ->keyframe()
 
 					 ->move(root, glm::vec3(-30.0f, 0.0f, 0.0f))

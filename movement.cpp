@@ -2,8 +2,12 @@
 
 #include <algorithm>
 
-float sgn(float s) {
-  return s <= 0 ? -1 : 1;
+glm::vec3 sgn(glm::vec3 a, glm::vec3 b) {
+  return glm::vec3(
+    a.x*b.x < 0.0f ? 1 : -1,
+    a.y*b.y < 0.0f ? 1 : -1,
+    a.z*b.z < 0.0f ? 1 : -1
+  );
 }
 
 Movement::Movement() {
@@ -62,11 +66,8 @@ bool Movement::frame(float fill) {
   }
 
   for (std::map<Bone*,glm::vec3>::iterator kv = sequence[position].begin(); kv != sequence[position].end(); ++kv) {
-    kv->first->rotate(
-        (sequence[position-1][kv->first].x - kv->second.x) * fill * sgn(kv->second.x),
-        (sequence[position-1][kv->first].y - kv->second.y) * fill * sgn(kv->second.y),
-        (sequence[position-1][kv->first].z - kv->second.z) * fill * sgn(kv->second.z)
-    );
+    glm::vec3 dv = (sequence[position-1][kv->first] - kv->second) * sgn(sequence[position-1][kv->first], kv->second) * fill;
+    kv->first->rotate(dv.x, dv.y, dv.z);
   }
   n++;
 
