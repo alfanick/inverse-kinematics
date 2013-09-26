@@ -26,6 +26,7 @@ glm::vec3 target;
 Movement* animation = new Movement();
 bool animation_running = false;
 float animation_fill = 0.0f;
+bool root_set = false;
 
 GLfloat mat_podstawa[] = { 60.0/255.0, 14.0/255.0, 14.0/255.0, 1.0 };
 GLfloat mat_ramie[] = {248.0/255.0, 233.0/255.0, 202.0/255.0, 1.0};
@@ -171,7 +172,12 @@ void displayFrame(void) {
 	glutSolidCube(1.0f);
 	glPopMatrix();
 
-  root->M = glm::rotate(M*V, -90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	if (!root_set) {
+		root->M = glm::rotate(root->M*V, -90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+		root_set = true;
+	}
+
+
 
 	drawBones(root);
 		/*
