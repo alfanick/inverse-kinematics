@@ -107,11 +107,13 @@ class Bone {
      * @return this
      */
     Bone* rotate(float dx, float dy, float dz);
-    
+
     /**
      * @return 3d position of bone's end in glm::vec4
      */
     glm::vec4 getEndPosition();
+
+		glm::mat4 getTransform();
 
     /**
      * Find Bone using its unique identifier. On every joint there

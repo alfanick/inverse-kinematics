@@ -32,21 +32,25 @@ void Bone::remove(Bone *b) {
 }
 
 glm::vec4 Bone::getEndPosition() {
-  glm::vec4 endPosition;
-  if(parent == NULL) {
-    endPosition = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
-  }
-  else {
-    endPosition = parent->getEndPosition();
-  }
+	return glm::translate(getTransform(), glm::vec3(0.0f, 0.0f, length)) * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+}
 
-  glm::mat4 A(1.0f);
-  glm::quat rot(glm::vec3(RAD(rotation.x), RAD(rotation.y), RAD(rotation.z)));
-  A = glm::translate(A, glm::vec3(0.0f, 0.0f, length));
+glm::mat4 Bone::getTransform() {
+	glm::mat4 P = glm::mat4();
 
-  endPosition = A*(rot*endPosition);
+	if (parent != NULL) {
+		P = glm::translate(P, glm::vec3(0.0f, 0.0f, parent->length));
 
-  return endPosition;
+		P = glm::rotate(P, rotation.x, glm::vec3(P*glm::vec4(1.0f, 0.0f, 0.0f, 0.0f)));
+		P = glm::rotate(P, rotation.y, glm::vec3(P*glm::vec4(0.0f, 1.0f, 0.0f, 0.0f)));
+		P = glm::rotate(P, rotation.z, glm::vec3(P*glm::vec4(0.0f, 0.0f, 1.0f, 0.0f)));
+
+		P = parent->getTransform() * P;
+	} else {
+		P = glm::rotate(P, 90.0f, glm::vec3(-1.0f, 0.0f, 0.0f));
+	}
+
+	return P;
 }
 
 Bone* Bone::constraints(float nx, float mx, float ny, float my, float nz, float mz) {

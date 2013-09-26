@@ -167,6 +167,18 @@ void displayFrame(void) {
   glutSolidSphere(0.1f, 32, 32);
   glPopMatrix();
 
+	/*
+  glPushMatrix();
+  glMaterialfv(GL_FRONT, GL_SPECULAR, mat_podstawa);
+  glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_podstawa);
+  glMaterialfv(GL_FRONT, GL_SHININESS, s);
+  mat_cel[3] = 0.5;
+  glMaterialfv(GL_FRONT, GL_EMISSION, mat_podstawa);
+  mat_cel[3] = 1.0;
+  glLoadMatrixf(glm::value_ptr(glm::translate(M*V, glm::vec3(root->bone(111)->getEndPosition()))));
+  glutSolidSphere(0.3f, 32, 32);
+  glPopMatrix();
+*/
 
   GLfloat t[] = {0.0,0.0, 0.0,1.0};
 	glPushMatrix();
@@ -372,12 +384,12 @@ void keyUp(unsigned char c, int x, int y) {
     case 'p': {
       int id = 3;
       Bone * currentBone = root->bone(111);
-      while(currentBone->parent != NULL) {
+      do {
         printf("Bone %d\n\t", id);
         displayVec3(currentBone->getEndPosition());
         --id;
         currentBone = currentBone->parent;
-      }
+      } while (currentBone != NULL);
       break; }
     case ',':
       Bone * b = root->bone(1);
