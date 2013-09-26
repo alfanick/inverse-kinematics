@@ -8,8 +8,6 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
-#include "tga.h"
-#include "cube.h"
 
 #include "helpers.h"
 #include "bone.h"
@@ -29,6 +27,7 @@ Movement* animation = new Movement();
 bool animation_running = false;
 float animation_fill = 0.0f;
 bool root_set = false;
+unsigned long long effector = 0;
 
 GLfloat mat_podstawa[] = { 60.0/255.0, 14.0/255.0, 14.0/255.0, 1.0 };
 GLfloat mat_ramie[] = {248.0/255.0, 233.0/255.0, 202.0/255.0, 1.0};
@@ -64,7 +63,6 @@ void drawBones(Bone* b) {
 	glm::mat4 previous = b->M;
 
 	if (b->parent != NULL) {
-
     b->M = glm::translate(b->M, glm::vec3(0.0f, 0.0f, b->parent->length));
 
     b->M = glm::rotate(b->M, b->rotation.x, glm::vec3(b->M*glm::vec4(1.0f, 0.0f, 0.0f, 0.0f)));
@@ -76,7 +74,6 @@ void drawBones(Bone* b) {
     b->M = glm::rotate(b->M, b->rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
     b->M = glm::rotate(b->M, b->rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
     b->M = glm::rotate(b->M, b->rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
-
 	}
 
   glLoadMatrixf(glm::value_ptr(b->M));
@@ -89,19 +86,19 @@ void drawBones(Bone* b) {
     glutSolidSphere(0.2f, 32,32);
   }
 
-    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_ramie);
-    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_ramie);
-    s[0] = 11;
-    glMaterialfv(GL_FRONT, GL_SHININESS, s);
-	GLUquadricObj* q = gluNewQuadric();
-  if (b->bones.empty())
-    gluCylinder(q, 0.1f, 0.1f, b->length - 0.5f, 32, 32);
-  else
-	  gluCylinder(q, 0.1f, 0.1f, b->length, 32, 32);
+  glMaterialfv(GL_FRONT, GL_SPECULAR, mat_ramie);
+  glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_ramie);
+  s[0] = 11;
+  glMaterialfv(GL_FRONT, GL_SHININESS, s);
 
+	GLUquadricObj* q = gluNewQuadric();
+	if (b->bones.empty())
+		gluCylinder(q, 0.1f, 0.1f, b->length - 0.5f, 32, 32);
+	else
+		gluCylinder(q, 0.1f, 0.1f, b->length, 32, 32);
 	gluDeleteQuadric(q);
 
-  glPopMatrix();
+	glPopMatrix();
 
 
   if (b->bones.empty()) {
@@ -145,15 +142,8 @@ void displayFrame(void) {
 
 	glm::mat4 M=glm::mat4(1.0f);
 	glLoadMatrixf(glm::value_ptr(V*M));
-/*
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_COLOR_ARRAY);
-	glVertexPointer(3,GL_FLOAT,0,cubeVertices);
-	glColorPointer(3,GL_FLOAT,0,cubeColors);
-	glDrawArrays(GL_QUADS,0,cubeVertexCount);
-	glDisableClientState(GL_VERTEX_ARRAY);
-*/
-  GLfloat s[] = {128};
+
+	GLfloat s[] = {128};
   glPushMatrix();
   glMaterialfv(GL_FRONT, GL_SPECULAR, mat_cel);
   glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_cel);
@@ -164,19 +154,6 @@ void displayFrame(void) {
   glLoadMatrixf(glm::value_ptr(glm::translate(M*V, target)));
   glutSolidSphere(0.3f, 32, 32);
   glPopMatrix();
-
-	/*
-  glPushMatrix();
-  glMaterialfv(GL_FRONT, GL_SPECULAR, mat_podstawa);
-  glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_podstawa);
-  glMaterialfv(GL_FRONT, GL_SHININESS, s);
-  mat_cel[3] = 0.5;
-  glMaterialfv(GL_FRONT, GL_EMISSION, mat_podstawa);
-  mat_cel[3] = 1.0;
-  glLoadMatrixf(glm::value_ptr(glm::translate(M*V, glm::vec3(root->bone(111)->getEndPosition()))));
-  glutSolidSphere(0.3f, 32, 32);
-  glPopMatrix();
-*/
 
   GLfloat t[] = {0.0,0.0, 0.0,1.0};
 	glPushMatrix();
@@ -194,16 +171,6 @@ void displayFrame(void) {
 
 
 	drawBones(root);
-		/*
-	GLUquadricObj *quadratic;
-
-	quadratic = gluNewQuadric();
-
-	glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
-	gluCylinder(quadratic,0.1f,0.1f,3.0f,32,32);
-
-	gluDeleteQuadrac(quadratic);
-*/
 
 
 	glutSwapBuffers();
@@ -223,7 +190,6 @@ void nextFrame(void) {
 		if (!animation->frame(interval/2000.0, root)) {
 			animation_fill = 0.0;
 			if (!animation->next()) {
-				printf("stop!\n");
 				animation_running = false;
 			}
 		}
@@ -394,21 +360,10 @@ void displayVec3(glm::vec4 vec) {
 
 void keyUp(unsigned char c, int x, int y) {
   switch(c) {
-    case 'p': {
-      int id = 3;
-      Bone * currentBone = root->bone(111);
-      do {
-        printf("Bone %d\n\t", id);
-        displayVec3(currentBone->getEndPosition());
-        --id;
-        currentBone = currentBone->parent;
-      } while (currentBone != NULL);
-      printf("target: %f %f %f\n", target.x, target.y, target.z);
-      break; }
     case ',':
       Bone *b = new Bone(*root);
 
-      ccd::findNewAngles(b->bone(11111111), target);
+      ccd::findNewAngles(b->bone(effector), target);
 
       delete animation;
       animation = new Movement();
@@ -432,12 +387,9 @@ int main(int argc, char* argv[]) {
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 	glutInitWindowSize(800,800);
 	glutInitWindowPosition(0,0);
-	glutCreateWindow("Program OpenGL");
+	glutCreateWindow("Inverse Kinematics - A. Juskowiak, B. Kotowski");
 	glutDisplayFunc(displayFrame);
 	glutIdleFunc(nextFrame);
-
-	//Tutaj kod inicjujacy
-	//glewInit();
 
   glutSpecialFunc(specKeyDown);
 	glutSpecialUpFunc(specKeyUp);
@@ -471,35 +423,15 @@ int main(int argc, char* argv[]) {
   // root->add(new Bone(3.5))->constraints(-90,90, -90,90, -360,360)->rotate(0, 0, 0)
   //     ->add(new Bone(4))->rotate(0, -75, 0)
   //     ->add(new Bone(1))->rotate(0, -45, 0);
+	//  effector = 11111111;
   root->add(new Bone(1))->add(new Bone(1))->rotate(0,10,0)
       ->add(new Bone(1))->rotate(0,10,0)
       ->add(new Bone(1))->rotate(0,10,0)
       ->add(new Bone(1))->rotate(0,10,0)
       ->add(new Bone(1))->rotate(0,10,0)->add(new Bone(1))->rotate(0,10,0)->add(new Bone(1))->rotate(0,10,0);
 
-  assert(root->bone(1) == root->bones[0]);
-  assert(root->bone(11) == root->bones[0]->bones[0]);
-  assert(root->bone(111) == root->bones[0]->bones[0]->bones[0]);
-/*
-	animation->set(root)
-					 ->keyframe()
+	effector = 11111111;
 
-					 ->move(root->bone(11), glm::vec3(0.0f, -30.0f, 0.0f))
-					 ->move(root->bone(1), glm::vec3(0.0f, -45.0f, 0.0f))
-					 ->keyframe()
-
-					 ->move(root->bone(1), glm::vec3(0.0f, +45.0f, 0.0f))
-					 ->keyframe()
-
-					 ->move(root->bone(11), glm::vec3(0.0f, +30.0f, 0.0f))
-					 ->keyframe()
-
-					 ->move(root->bone(1), glm::vec3(0.0f, 0.0f, -45.0f))
-					 ->keyframe()
-
-					 ->move(root, glm::vec3(-30.0f, 0.0f, 0.0f))
-					 ->keyframe();
-*/
   glutMainLoop();
 
   delete root;
