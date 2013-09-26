@@ -39,9 +39,9 @@ Bone* root;
 float r_up = 60.0f;
 
 void randomizeTarget() {
-  target.x = float(rand() % 10000) / 1000.0 - 5.0;
-  target.y = float(rand() % 10000) / 1000.0 - 5.0;
-  target.z = float(rand() % 10000) / 1000.0 - 5.0;
+  target.x = float(rand() % 8000) / 800.0 - 4.0;
+  target.y = float(rand() % 8000) / 800.0 - 4.0;
+  target.z = float(rand() % 8000) / 800.0 - 4.0;
 
   GLfloat light_position[] = { target.x, target.y, target.z, 1.0 };
 
@@ -162,7 +162,7 @@ void displayFrame(void) {
   s[0] = 0;
   glMaterialfv(GL_FRONT, GL_SHININESS, s);
 	glMaterialfv(GL_FRONT, GL_EMISSION, t);
-  glScalef(3.0f,0.2f,2.0f);
+  glScalef(0.6f,0.2f,0.6f);
 	glutSolidCube(1.0f);
 	glPopMatrix();
 
