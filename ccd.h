@@ -3,6 +3,8 @@
 
 #include "bone.h"
 #include "glm/glm.hpp"
+#include "glm/gtc/quaternion.hpp"
+#include "glm/gtx/quaternion.hpp"
 using namespace glm;
 
 namespace ccd {

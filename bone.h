@@ -109,6 +109,16 @@ class Bone {
     Bone* rotate(float dx, float dy, float dz);
 
     /**
+     * Change rotation angle by given amounts or by
+     * max possible in case it doesn't fit constraint
+     * @param dx X change
+     * @parem dy Y change
+     * @param dz Z change
+     * @return this
+     */
+    Bone* rotateMax(float dx, float dy, float dz);
+
+    /**
      * @return 3d position of bone's end in glm::vec4
      */
     glm::vec4 getEndPosition();

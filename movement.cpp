@@ -22,7 +22,7 @@ Movement* Movement::move(Bone* bone, glm::vec3 delta_angles) {
 Movement* Movement::set(Bone* bone, glm::vec3 angles) {
   sequence[position][bone] = angles;
 
-  printf("(%d) %f: \t%f\t\t%f\t\t%f\n", position, bone->length, angles.x, angles.y, angles.z);
+  // printf("(%d) %f: \t%f\t\t%f\t\t%f\n", position, bone->length, angles.x, angles.y, angles.z);
 
   return this;
 }
@@ -34,7 +34,7 @@ Movement* Movement::keyframe() {
   sequence[position] = sequence[position-1];
 
   for (std::map<Bone*,glm::vec3>::iterator kv = sequence[position].begin(); kv != sequence[position].end(); ++kv) {
-      printf("[%d] %f: \t%f\t\t%f\t\t%f\n", position, kv->first->length, kv->second.x, kv->second.y, kv->second.z);
+      // printf("[%d] %f: \t%f\t\t%f\t\t%f\n", position, kv->first->length, kv->second.x, kv->second.y, kv->second.z);
 
   }
 

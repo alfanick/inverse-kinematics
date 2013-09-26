@@ -390,15 +390,12 @@ void keyUp(unsigned char c, int x, int y) {
         --id;
         currentBone = currentBone->parent;
       } while (currentBone != NULL);
+      printf("target: %f %f %f\n", target.x, target.y, target.z);
       break; }
     case ',':
-      Bone * b = root->bone(1);
-      vec4 endPosition = (b->getEndPosition());
-      printf("end position\n");
-      displayVec3(endPosition);
-      printf("length: %f\n", b->length);
-      endPosition = glm::normalize(endPosition);
-      displayVec3(endPosition);
+      Bone * b = root->bone(11111111);
+      // vec4 endPosition = (b->getEndPosition());
+      ccd::findNewAngles(b, target, 100);
       break;
   }
 }
@@ -446,9 +443,12 @@ int main(int argc, char* argv[]) {
 
 	root = new Bone(0.0f);
 
-  root->add(new Bone(3.5))->constraints(-90,90, -90,90, -360,360)->rotate(0, 0, 0)
-      ->add(new Bone(4))->rotate(0, -75, 0)
-      ->add(new Bone(1))->rotate(0, -45, 0);
+  // root->add(new Bone(3.5))->constraints(-90,90, -90,90, -360,360)->rotate(0, 0, 0)
+  //     ->add(new Bone(4))->rotate(0, -75, 0)
+  //     ->add(new Bone(1))->rotate(0, -45, 0);
+  root->add(new Bone(1))->add(new Bone(1))->rotate(0,10,0)->add(new Bone(1))->rotate(0,10,0)
+      ->add(new Bone(1))->rotate(0,10,0)->add(new Bone(1))->rotate(0,10,0)
+      ->add(new Bone(1))->rotate(0,10,0)->add(new Bone(1))->rotate(0,10,0)->add(new Bone(1))->rotate(0,10,0);
 
   assert(root->bone(1) == root->bones[0]);
   assert(root->bone(11) == root->bones[0]->bones[0]);
