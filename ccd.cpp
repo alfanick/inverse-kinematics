@@ -12,7 +12,6 @@ void ccd::findNewAngles(Bone *endEffector, vec3 target, int iterations) {
       vec3 toTarget = normalize(vec3(target.x-startPosition.x, target.y-startPosition.y, target.z-startPosition.z));
       vec3 toEnd = normalize(vec3(endPosition.x-startPosition.x, endPosition.y-startPosition.y, endPosition.z-startPosition.z));
       float cosine = dot(toEnd, toTarget);
-      float angle = ANGLE(acos(cosine));
       if(cosine < 0.99) {
         vec3 crossResult = cross(toEnd, toTarget);
         float a = glm::angle(toTarget, toEnd);
