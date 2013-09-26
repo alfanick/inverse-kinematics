@@ -113,6 +113,9 @@ class Bone {
      */
     glm::vec4 getEndPosition();
 
+		/**
+		 * @return Transformation used in Bone coordinate system
+		 */
 		glm::mat4 getTransform();
 
     /**
