@@ -69,6 +69,7 @@ Bone* Bone::setRotate(float x, float y, float z) {
 
   checkConstraints(lx = fmod(x, 360.0f), ly = fmod(y, 360.f), lz = fmod(z, 360.0f));
 
+
   rotation.x = lx;
   rotation.y = ly;
   rotation.z = lz;

@@ -13,6 +13,7 @@
 
 #include "helpers.h"
 #include "bone.h"
+#include "movement.h"
 #include "ccd.h"
 
 float speed_x=0; //60 stopni/s
@@ -24,6 +25,10 @@ float zoom = 15.0f;
 float cdx,cdy;
 
 glm::vec3 target;
+Movement* animation = new Movement();
+bool animation_running = false;
+float animation_fill = 0.0f;
+bool root_set = false;
 
 GLfloat mat_podstawa[] = { 60.0/255.0, 14.0/255.0, 14.0/255.0, 1.0 };
 GLfloat mat_ramie[] = {248.0/255.0, 233.0/255.0, 202.0/255.0, 1.0};
@@ -46,6 +51,9 @@ void randomizeTarget() {
   mat_cel[3] = 0.5;
   glLightfv(GL_LIGHT1, GL_DIFFUSE, mat_cel);
   mat_cel[3] = 1.0;
+
+	delete animation;
+	animation = new Movement();
 
 }
 
@@ -166,7 +174,12 @@ void displayFrame(void) {
 	glutSolidCube(1.0f);
 	glPopMatrix();
 
-  root->M = glm::rotate(M*V, -90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	if (!root_set) {
+		root->M = glm::rotate(root->M*V, -90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+		root_set = true;
+	}
+
+
 
 	drawBones(root);
 		/*
@@ -187,10 +200,23 @@ void displayFrame(void) {
 
 void nextFrame(void) {
 	int actTime=glutGet(GLUT_ELAPSED_TIME);
-	int interval=actTime-lastTime;
+	float interval=actTime-lastTime;
 	lastTime=actTime;
 	angle_x+=speed_x*interval/1000.0;
 	angle_y+=speed_y*interval/1000.0;
+
+	if (animation_running) {
+		animation_fill += interval/1000.0;
+
+		if (!animation->frame(interval/1000.0)) {
+			animation_fill = 0.0;
+			if (!animation->next()) {
+				printf("stop!\n");
+				animation_running = false;
+			}
+		}
+	}
+
 	if (angle_x>360) angle_x-=360;
 	if (angle_x>360) angle_x+=360;
 	if (angle_y>360) angle_y-=360;
@@ -253,6 +279,10 @@ void specKeyUp(int c, int x, int y) {
 void keyDown(unsigned char c, int x, int y) {
   try {
   switch(c) {
+		case '`':
+			animation->start()->next();
+			animation_running = true;
+			break;
     case '-':
       zoom += 0.5f;
       break;
@@ -410,9 +440,26 @@ int main(int argc, char* argv[]) {
   assert(root->bone(11) == root->bones[0]->bones[0]);
   assert(root->bone(111) == root->bones[0]->bones[0]->bones[0]);
 
+	animation->set(root)
+					 ->keyframe()
+
+					 ->move(root->bone(11), glm::vec3(0.0f, 30.0f, 0.0f))
+					 ->move(root->bone(1), glm::vec3(0.0f, -45.0f, 0.0f))
+					 ->keyframe()
+
+					 ->move(root->bone(1), glm::vec3(0.0f, +45.0f, 0.0f))
+					 ->keyframe()
+
+					 ->move(root->bone(11), glm::vec3(0.0f, -30.0f, 0.0f))
+					 ->keyframe()
+
+					 ->move(root->bone(1), glm::vec3(0.0f, 0.0f, 45.0f))
+					 ->keyframe();
+
   glutMainLoop();
 
   delete root;
+	delete animation;
 
   return 0;
 }
