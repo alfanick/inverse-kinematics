@@ -51,10 +51,6 @@ void randomizeTarget() {
   mat_cel[3] = 0.5;
   glLightfv(GL_LIGHT1, GL_DIFFUSE, mat_cel);
   mat_cel[3] = 1.0;
-
-	delete animation;
-	animation = new Movement();
-
 }
 
 void drawBones(Bone* b) {
@@ -164,7 +160,7 @@ void displayFrame(void) {
   glMaterialfv(GL_FRONT, GL_EMISSION, mat_cel);
   mat_cel[3] = 1.0;
   glLoadMatrixf(glm::value_ptr(glm::translate(M*V, target)));
-  glutSolidSphere(0.1f, 32, 32);
+  glutSolidSphere(0.3f, 32, 32);
   glPopMatrix();
 
 	/*
@@ -220,9 +216,9 @@ void nextFrame(void) {
 	angle_y+=speed_y*interval/1000.0;
 
 	if (animation_running) {
-		animation_fill += interval/1000.0;
+		animation_fill += interval/4000.0;
 
-		if (!animation->frame(interval/1000.0)) {
+		if (!animation->frame(interval/4000.0, root)) {
 			animation_fill = 0.0;
 			if (!animation->next()) {
 				printf("stop!\n");
@@ -294,8 +290,6 @@ void keyDown(unsigned char c, int x, int y) {
   try {
   switch(c) {
 		case '`':
-			animation->start()->next();
-			animation_running = true;
 			break;
     case '-':
       zoom += 0.5f;
@@ -393,9 +387,21 @@ void keyUp(unsigned char c, int x, int y) {
       printf("target: %f %f %f\n", target.x, target.y, target.z);
       break; }
     case ',':
-      Bone * b = root->bone(11111111);
-      // vec4 endPosition = (b->getEndPosition());
-      ccd::findNewAngles(b, target);
+      Bone *b = new Bone(*root);
+
+      ccd::findNewAngles(b->bone(11111111), target);
+
+      delete animation;
+
+      animation = new Movement();
+      animation->set(root)->keyframe();
+      animation->set(b)->keyframe();
+
+      delete b;
+
+      animation->start()->next();
+			animation_running = true;
+
       break;
   }
 }
@@ -450,16 +456,11 @@ int main(int argc, char* argv[]) {
       ->add(new Bone(1))->rotate(0,10,0)->add(new Bone(1))->rotate(0,10,0)
       ->add(new Bone(1))->rotate(0,10,0)->add(new Bone(1))->rotate(0,10,0)->add(new Bone(1))->rotate(0,10,0);
 
-  assert(root->bone(1) == root->bones[0]);
-  assert(root->bone(11) == root->bones[0]->bones[0]);
-  assert(root->bone(111) == root->bones[0]->bones[0]->bones[0]);
 
-	animation->set(root)
-					 ->keyframe()
-
+/*
 					 ->move(root->bone(11), glm::vec3(0.0f, -30.0f, 0.0f))
 					 ->move(root->bone(1), glm::vec3(0.0f, -45.0f, 0.0f))
-					 ->keyframe()
+					 ->keyframe();
 
 					 ->move(root->bone(1), glm::vec3(0.0f, +45.0f, 0.0f))
 					 ->keyframe()
@@ -471,7 +472,7 @@ int main(int argc, char* argv[]) {
 					 ->keyframe()
 
 					 ->move(root, glm::vec3(-30.0f, 0.0f, 0.0f))
-					 ->keyframe();
+					 ->keyframe();*/
 
   glutMainLoop();
 

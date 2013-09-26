@@ -17,6 +17,20 @@ Bone::Bone(float l) {
   constraint[1] = glm::vec3(360.0f);
 };
 
+Bone::Bone(const Bone& b) {
+  length = b.length;
+  M = glm::mat4(b.M);
+  parent = NULL;
+  rotation = glm::vec3(b.rotation);
+  coordinates = glm::vec3(b.coordinates);
+  constraint[0] = glm::vec3(b.constraint[0]);
+  constraint[1] = glm::vec3(b.constraint[1]);
+
+  for (std::vector< Bone* >::const_iterator it = b.bones.begin(); it != b.bones.end(); ++it) {
+    add(new Bone(**it));
+  }
+}
+
 Bone* Bone::add(Bone *b) {
 	b->parent = this;
 	bones.push_back(b);
@@ -109,6 +123,13 @@ Bone* Bone::bone(unsigned long long id) {
   } else {
     return bones[id % 10 - 1]->bone(id/10);
   }
+}
+
+unsigned long long Bone::id() {
+  if (parent == NULL)
+    return 0;
+  else
+    return parent->id()*10 + (std::find(parent->bones.begin(), parent->bones.end(), this) - parent->bones.begin()) + 1;
 }
 
 Bone::~Bone() {

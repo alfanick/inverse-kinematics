@@ -144,12 +144,16 @@ class Bone {
      */
     Bone* bone(unsigned long long id);
 
+		unsigned long long id();
+
     /**
      * Create bone of given length, angles are not constrained.
      *
      * @param l Length
      */
 		Bone(float l);
+
+		Bone(const Bone& b);
 
     /**
      * Destroy Bone and its children attached to joint - does

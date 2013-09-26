@@ -20,12 +20,12 @@ class Movement {
      * Vector represents sequence of maps, each map represents
      * angles of given bone in the given frame.
      */
-    std::vector< std::map<Bone*, glm::vec3> > sequence;
+    std::vector< std::map<unsigned long long, glm::vec3> > sequence;
 
     /**
      * Length moved already
      */
-    std::vector< std::map<Bone*, glm::vec3> > moved;
+    std::vector< std::map<unsigned long long, glm::vec3> > moved;
 
     /**
      * Frame number
@@ -91,9 +91,10 @@ class Movement {
      * in current frame.
      *
      * @param fill Length of arc (in percent)
+     * @param root Root bone for ids
      * @return true if success
      */
-    bool frame(float fill);
+    bool frame(float fill, Bone* root);
 
     /**
      * @return Number of frames
