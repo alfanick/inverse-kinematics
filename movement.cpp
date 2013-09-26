@@ -4,9 +4,9 @@
 
 glm::vec3 sgn(glm::vec3 a, glm::vec3 b) {
   return glm::vec3(
-    a.x*b.x < 0.0f ? 1 : -1,
-    a.y*b.y < 0.0f ? 1 : -1,
-    a.z*b.z < 0.0f ? 1 : -1
+    a.x >= b.x ? -1 : 1,
+    a.y >= b.y ? -1 : 1,
+    a.z >= b.z ? -1 : 1
   );
 }
 
@@ -67,7 +67,12 @@ bool Movement::frame(float fill, Bone* root) {
   Bone* current;
 
   for (std::map<unsigned long long,glm::vec3>::iterator kv = sequence[position].begin(); kv != sequence[position].end(); ++kv) {
-    glm::vec3 dv = (sequence[position-1][kv->first] - kv->second) * sgn(sequence[position-1][kv->first], kv->second) * fill;
+    glm::vec3 dv = glm::abs(sequence[position-1][kv->first] - kv->second);
+    glm::vec3 s = sgn(sequence[position-1][kv->first], kv->second);
+
+    dv.x *= s.x * fill;
+    dv.y *= s.y * fill;
+    dv.z *= s.z * fill;
 
     moved[position][kv->first] += glm::abs(dv);
     current = root->bone(kv->first);
@@ -91,7 +96,7 @@ bool Movement::frame(float fill, Bone* root) {
     }
   }
 
-  return c < sequence[position].size() * 3;
+  return c <= sequence[position].size() * 3;
 }
 
 bool Movement::next() {

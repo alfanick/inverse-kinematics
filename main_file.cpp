@@ -216,9 +216,9 @@ void nextFrame(void) {
 	angle_y+=speed_y*interval/1000.0;
 
 	if (animation_running) {
-		animation_fill += interval/4000.0;
+		animation_fill += interval/2000.0;
 
-		if (!animation->frame(interval/4000.0, root)) {
+		if (!animation->frame(interval/2000.0, root)) {
 			animation_fill = 0.0;
 			if (!animation->next()) {
 				printf("stop!\n");
@@ -413,6 +413,7 @@ void keyUp(unsigned char c, int x, int y) {
       delete animation;
 
       animation = new Movement();
+
       animation->set(root)->keyframe();
       animation->set(b)->keyframe();
 
