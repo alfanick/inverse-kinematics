@@ -359,6 +359,25 @@ void keyDown(unsigned char c, int x, int y) {
     case ' ':
       randomizeTarget();
       break;
+
+    case 'Q':
+      target.z -= 0.2f;
+      break;
+    case 'E':
+      target.z += 0.2f;
+      break;
+    case 'W':
+      target.y += 0.2;
+      break;
+    case 'S':
+      target.y -= 0.2;
+      break;
+    case 'A':
+      target.x -= 0.2;
+      break;
+    case 'D':
+      target.x += 0.2;
+      break;
   }
   } catch (ConstraintException* e) {
     printf("Cannot move further!\n");
