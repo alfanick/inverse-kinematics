@@ -12,7 +12,6 @@ glm::vec3 sgn(glm::vec3 a, glm::vec3 b) {
 
 Movement::Movement() {
   position = 0;
-  n = 0;
   sequence.resize(1);
 }
 
@@ -54,7 +53,6 @@ Movement* Movement::set(Bone* root) {
 
 Movement* Movement::start() {
   position = 0;
-  n =0 ;
   moved.clear();
   moved.resize(sequence.size());
 
@@ -64,7 +62,6 @@ Movement* Movement::start() {
     }
   }
 
-  printf("ok\n");
   return this;
 }
 
@@ -98,7 +95,6 @@ bool Movement::frame(float fill) {
       kv->first->rotate(0, 0, dv.z);
     }
   }
-  n++;
 
   return c < sequence[position].size() * 3;
 }
@@ -107,7 +103,6 @@ bool Movement::next() {
   if (position >= framesCount())
     return false;
 
-  n = 0;
   position++;
 
   return true;
