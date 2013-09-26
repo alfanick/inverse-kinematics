@@ -33,6 +33,9 @@ class Bone {
     //! Current rotation angles
     glm::vec3 rotation;
 
+    //! Current coordinates
+    glm::vec3 coordinates;
+
     //! Angles contraint (index 0 is minimum, index 1 is maximum)
     glm::vec3 constraint[2];
 
@@ -104,11 +107,11 @@ class Bone {
      * @return this
      */
     Bone* rotate(float dx, float dy, float dz);
-
+    
     /**
-     * @return 3d position of bone's end in glm::vec3
+     * @return 3d position of bone's end in glm::vec4
      */
-    glm::vec3 getEndPosition();
+    glm::vec4 getEndPosition();
 
     /**
      * Find Bone using its unique identifier. On every joint there

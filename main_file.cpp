@@ -11,8 +11,10 @@
 #include "tga.h"
 #include "cube.h"
 
+#include "helpers.h"
 #include "bone.h"
 #include "movement.h"
+#include "ccd.h"
 
 float speed_x=0; //60 stopni/s
 float speed_y=0; //60 stopni/s
@@ -361,16 +363,31 @@ void displayVec3(glm::vec3 vec) {
   printf("x: %f, y: %f, z: %f\n", vec.x, vec.y, vec.z);
 }
 
+void displayVec3(glm::vec4 vec) {
+  printf("x: %f, y: %f, z: %f\n", vec.x, vec.y, vec.z);
+}
+
 void keyUp(unsigned char c, int x, int y) {
-  if(c=='p') {
-    int id = 3;
-    Bone * currentBone = root->bone(111);
-    while(currentBone != NULL) {
-      printf("Bone %d\n\t", id);
-      displayVec3(currentBone->getEndPosition());
-      --id;
-      currentBone = currentBone->parent;
-    }
+  switch(c) {
+    case 'p': {
+      int id = 3;
+      Bone * currentBone = root->bone(111);
+      while(currentBone->parent != NULL) {
+        printf("Bone %d\n\t", id);
+        displayVec3(currentBone->getEndPosition());
+        --id;
+        currentBone = currentBone->parent;
+      }
+      break; }
+    case ',':
+      Bone * b = root->bone(1);
+      vec4 endPosition = (b->getEndPosition());
+      printf("end position\n");
+      displayVec3(endPosition);
+      printf("length: %f\n", b->length);
+      endPosition = glm::normalize(endPosition);
+      displayVec3(endPosition);
+      break;
   }
 }
 
