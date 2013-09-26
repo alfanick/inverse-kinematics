@@ -78,6 +78,7 @@ void Bone::checkConstraints(float x, float y, float z) {
   if (x < constraint[0].x || x > constraint[1].x ||
       y < constraint[0].y || y > constraint[1].y ||
       z < constraint[0].z || z > constraint[1].z) {
+    printf("%f, %f, %f\n(%f,%f), (%f,%f), (%f,%f)\n",x,y,z,constraint[0].x,constraint[1].x,constraint[0].y,constraint[1].y,constraint[0].z,constraint[1].z);
     throw new ConstraintException();
   }
 }
@@ -96,12 +97,18 @@ Bone* Bone::setRotate(float x, float y, float z) {
 }
 
 Bone* Bone::rotateMax(float dx, float dy, float dz) {
-  if(dx+rotation.x > constraint[1].x) dx = constraint[1].x-rotation.x;
-  if(dx+rotation.x < constraint[0].x) dx = constraint[0].x-rotation.x;
-  if(dy+rotation.y > constraint[1].y) dy = constraint[1].y-rotation.y;
-  if(dy+rotation.y < constraint[0].y) dy = constraint[0].y-rotation.y;
-  if(dz+rotation.z > constraint[1].z) dz = constraint[1].z-rotation.z;
-  if(dz+rotation.z < constraint[0].z) dz = constraint[0].z-rotation.z;
+  // if(dx+rotation.x > 180) dx -= 360;
+  // if(dy+rotation.y > 180) dy -= 360;
+  // if(dz+rotation.z > 180) dz -= 360;
+  // if(dx+rotation.x < -180) dx += 360;
+  // if(dy+rotation.y < -180) dy += 360;
+  // if(dz+rotation.z < -180) dz += 360;
+  if(dx+rotation.x > constraint[1].x) dx = constraint[1].x-rotation.x - 0.1f;
+  if(dx+rotation.x < constraint[0].x) dx = constraint[0].x-rotation.x+0.1f;
+  if(dy+rotation.y > constraint[1].y) dy = constraint[1].y-rotation.y-0.1f;
+  if(dy+rotation.y < constraint[0].y) dy = constraint[0].y-rotation.y+0.1f;
+  if(dz+rotation.z > constraint[1].z) dz = constraint[1].z-rotation.z-0.1f;
+  if(dz+rotation.z < constraint[0].z) dz = constraint[0].z-rotation.z+0.1f;
   rotate(dx,dy,dz);
   return this;
 }

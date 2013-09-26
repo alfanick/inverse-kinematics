@@ -12,7 +12,6 @@ void ccd::findNewAngles(Bone *endEffector, vec3 target, int iterations) {
       vec3 toTarget = normalize(vec3(target.x-startPosition.x, target.y-startPosition.y, target.z-startPosition.z));
       vec3 toEnd = normalize(vec3(endPosition.x-startPosition.x, endPosition.y-startPosition.y, endPosition.z-startPosition.z));
       float cosine = dot(toEnd, toTarget);
-      float angle = ANGLE(acos(cosine));
       if(cosine < 0.99) {
         vec3 crossResult = cross(toEnd, toTarget);
         float a = glm::angle(toTarget, toEnd);
@@ -22,12 +21,12 @@ void ccd::findNewAngles(Bone *endEffector, vec3 target, int iterations) {
         currentBone->rotateMax(euler.x, euler.y, euler.z);
       }
 
-      // vec3 tmp = vec3(endEffector->getEndPosition());
-      // tmp.x -= target.x; tmp.y -= target.y; tmp.z -= target.z;
-      // if(dot(tmp, tmp) < 1.0) {
-      //   found = true;
-      //   printf("found\n");
-      // }
+      vec3 tmp = vec3(endEffector->getEndPosition());
+      tmp.x -= target.x; tmp.y -= target.y; tmp.z -= target.z;
+      if(dot(tmp, tmp) < 0.01) {
+        found = true;
+        printf("found\n");
+      }
       currentBone = currentBone->parent;
     }
   }
