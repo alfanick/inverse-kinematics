@@ -70,7 +70,12 @@ void drawBones(Bone* b) {
     b->M = glm::rotate(b->M, b->rotation.z, glm::vec3(b->M*glm::vec4(0.0f, 0.0f, 1.0f, 0.0f)));
 
     b->M = b->parent->M * b->M;
-  }
+  } else {
+    b->M = glm::rotate(b->M, b->rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
+    b->M = glm::rotate(b->M, b->rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+    b->M = glm::rotate(b->M, b->rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+
+	}
 
   glLoadMatrixf(glm::value_ptr(b->M));
 
@@ -172,11 +177,8 @@ void displayFrame(void) {
 	glutSolidCube(1.0f);
 	glPopMatrix();
 
-	if (!root_set) {
-		root->M = glm::rotate(root->M*V, -90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-		root_set = true;
-	}
-
+	root->M = glm::rotate(M*V, -90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	root->setRotate(root->rotation.x, root->rotation.y, root->rotation.z);
 
 
 	drawBones(root);
@@ -437,6 +439,9 @@ int main(int argc, char* argv[]) {
 					 ->keyframe()
 
 					 ->move(root->bone(1), glm::vec3(0.0f, 0.0f, 45.0f))
+					 ->keyframe()
+
+					 ->move(root, glm::vec3(-30.0f, 0.0f, 0.0f))
 					 ->keyframe();
 
   glutMainLoop();
