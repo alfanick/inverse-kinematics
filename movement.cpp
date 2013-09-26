@@ -1,16 +1,18 @@
 #include "movement.h"
 
+#include <algorithm>
+
 Movement::Movement() {
   position = 0;
   sequence.resize(1);
 }
 
 Movement* Movement::move(Bone* bone, glm::vec3 delta_angles) {
-  return set(bone, sequence.back()[bone] + delta_angles);
+  return set(bone, sequence[position][bone] + delta_angles);
 }
 
 Movement* Movement::set(Bone* bone, glm::vec3 angles) {
-  sequence.back()[bone] = angles;
+  sequence[position][bone] = angles;
 
   return this;
 }
@@ -18,6 +20,9 @@ Movement* Movement::set(Bone* bone, glm::vec3 angles) {
 Movement* Movement::keyframe() {
   position++;
   sequence.resize(position+1);
+
+  sequence[position] = sequence[position-1];
+
   return this;
 }
 
@@ -42,7 +47,7 @@ bool Movement::frame() {
     return false;
 
   for (std::map<Bone*,glm::vec3>::iterator kv = sequence[position].begin(); kv != sequence[position].end(); ++kv) {
-    kv->first->rotate(kv->second.x, kv->second.y, kv->second.z);
+    kv->first->setRotate(kv->second.x, kv->second.y, kv->second.z);
   }
 
   position++;
