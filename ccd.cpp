@@ -21,12 +21,12 @@ void ccd::findNewAngles(Bone *endEffector, vec3 target, int iterations) {
         currentBone->rotateMax(euler.x, euler.y, euler.z);
       }
 
-      // vec3 tmp = vec3(endEffector->getEndPosition());
-      // tmp.x -= target.x; tmp.y -= target.y; tmp.z -= target.z;
-      // if(dot(tmp, tmp) < 1.0) {
-      //   found = true;
-      //   printf("found\n");
-      // }
+      vec3 tmp = vec3(endEffector->getEndPosition());
+      tmp.x -= target.x; tmp.y -= target.y; tmp.z -= target.z;
+      if(dot(tmp, tmp) < 0.01) {
+        found = true;
+        printf("found\n");
+      }
       currentBone = currentBone->parent;
     }
   }
