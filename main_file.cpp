@@ -395,7 +395,7 @@ void keyUp(unsigned char c, int x, int y) {
     case ',':
       Bone * b = root->bone(11111111);
       // vec4 endPosition = (b->getEndPosition());
-      ccd::findNewAngles(b, target, 100);
+      ccd::findNewAngles(b, target);
       break;
   }
 }

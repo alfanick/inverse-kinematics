@@ -7,6 +7,7 @@
 #include "glm/gtx/quaternion.hpp"
 #include "glm/gtx/euler_angles.hpp"
 #include "glm/gtx/norm.hpp"
+#include "glm/gtx/vector_angle.hpp"
 using namespace glm;
 
 namespace ccd {
