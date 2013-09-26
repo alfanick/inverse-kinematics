@@ -12,6 +12,7 @@
 #include "cube.h"
 
 #include "bone.h"
+#include "movement.h"
 
 float speed_x=0; //60 stopni/s
 float speed_y=0; //60 stopni/s
@@ -22,6 +23,7 @@ float zoom = 15.0f;
 float cdx,cdy;
 
 glm::vec3 target;
+Movement* animation = new Movement();
 
 GLfloat mat_podstawa[] = { 60.0/255.0, 14.0/255.0, 14.0/255.0, 1.0 };
 GLfloat mat_ramie[] = {248.0/255.0, 233.0/255.0, 202.0/255.0, 1.0};
@@ -44,6 +46,9 @@ void randomizeTarget() {
   mat_cel[3] = 0.5;
   glLightfv(GL_LIGHT1, GL_DIFFUSE, mat_cel);
   mat_cel[3] = 1.0;
+
+	delete animation;
+	animation = new Movement();
 
 }
 
@@ -251,6 +256,9 @@ void specKeyUp(int c, int x, int y) {
 void keyDown(unsigned char c, int x, int y) {
   try {
   switch(c) {
+		case '`':
+			animation->frame();
+			break;
     case '-':
       zoom += 0.5f;
       break;
@@ -393,9 +401,19 @@ int main(int argc, char* argv[]) {
   assert(root->bone(11) == root->bones[0]->bones[0]);
   assert(root->bone(111) == root->bones[0]->bones[0]->bones[0]);
 
+	animation->set(root)
+					 ->move(root->bone(11), glm::vec3(30.0f, 0.0f, 0.0f))
+					 ->move(root->bone(1), glm::vec3(0.0f, -45.0f, 0.0f))
+					 ->keyframe()
+
+					 ->move(root->bone(1), glm::vec3(0.0f, 45.0f, 0.0f))
+					 ->keyframe();
+	animation->start();
+
   glutMainLoop();
 
   delete root;
+	delete animation;
 
   return 0;
 }
