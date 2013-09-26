@@ -365,6 +365,25 @@ void keyDown(unsigned char c, int x, int y) {
     case ' ':
       randomizeTarget();
       break;
+
+    case 'Q':
+      target.z -= 0.2f;
+      break;
+    case 'E':
+      target.z += 0.2f;
+      break;
+    case 'W':
+      target.y += 0.2;
+      break;
+    case 'S':
+      target.y -= 0.2;
+      break;
+    case 'A':
+      target.x -= 0.2;
+      break;
+    case 'D':
+      target.x += 0.2;
+      break;
   }
   } catch (ConstraintException* e) {
     printf("Cannot move further!\n");
@@ -393,7 +412,7 @@ void keyUp(unsigned char c, int x, int y) {
       printf("target: %f %f %f\n", target.x, target.y, target.z);
       break; }
     case ',':
-      Bone * b = root->bone(11111111);
+      Bone * b = root->bone(11111);
       // vec4 endPosition = (b->getEndPosition());
       ccd::findNewAngles(b, target);
       break;
@@ -447,8 +466,8 @@ int main(int argc, char* argv[]) {
   //     ->add(new Bone(4))->rotate(0, -75, 0)
   //     ->add(new Bone(1))->rotate(0, -45, 0);
   root->add(new Bone(1))->add(new Bone(1))->rotate(0,10,0)->add(new Bone(1))->rotate(0,10,0)
-      ->add(new Bone(1))->rotate(0,10,0)->add(new Bone(1))->rotate(0,10,0)
-      ->add(new Bone(1))->rotate(0,10,0)->add(new Bone(1))->rotate(0,10,0)->add(new Bone(1))->rotate(0,10,0);
+      ->add(new Bone(1))->rotate(0,10,0)->add(new Bone(1))->rotate(0,10,0);
+      // ->add(new Bone(1))->rotate(0,10,0)->add(new Bone(1))->rotate(0,10,0)->add(new Bone(1))->rotate(0,10,0);
 
   assert(root->bone(1) == root->bones[0]);
   assert(root->bone(11) == root->bones[0]->bones[0]);
