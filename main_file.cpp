@@ -220,9 +220,9 @@ void nextFrame(void) {
 	angle_y+=speed_y*interval/1000.0;
 
 	if (animation_running) {
-		animation_fill += interval/1000.0;
+		animation_fill += interval/1000.0 * 4.0;
 
-		if (!animation->frame(interval/1000.0)) {
+		if (!animation->frame(interval/1000.0 * 4.0)) {
 			animation_fill = 0.0;
 			if (!animation->next()) {
 				printf("stop!\n");

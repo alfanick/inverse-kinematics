@@ -22,6 +22,8 @@ class Movement {
      */
     std::vector< std::map<Bone*, glm::vec3> > sequence;
 
+    std::vector< std::map<Bone*, glm::vec3> > moved;
+
     /**
      * Count of dx
      */
