@@ -14,6 +14,7 @@ class Movement {
      */
     std::vector< std::map<Bone*, glm::vec3> > sequence;
 
+    float n;
     int position;
 
   public:
@@ -25,8 +26,10 @@ class Movement {
     Movement* set(Bone* root);
 
     Movement* start();
+    bool next();
 
-    bool frame();
+    bool frame(float fill);
+
     int framesCount();
 };
 

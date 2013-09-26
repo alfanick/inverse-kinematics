@@ -24,6 +24,8 @@ float cdx,cdy;
 
 glm::vec3 target;
 Movement* animation = new Movement();
+bool animation_running = false;
+float animation_fill = 0.0f;
 
 GLfloat mat_podstawa[] = { 60.0/255.0, 14.0/255.0, 14.0/255.0, 1.0 };
 GLfloat mat_ramie[] = {248.0/255.0, 233.0/255.0, 202.0/255.0, 1.0};
@@ -190,10 +192,23 @@ void displayFrame(void) {
 
 void nextFrame(void) {
 	int actTime=glutGet(GLUT_ELAPSED_TIME);
-	int interval=actTime-lastTime;
+	float interval=actTime-lastTime;
 	lastTime=actTime;
 	angle_x+=speed_x*interval/1000.0;
 	angle_y+=speed_y*interval/1000.0;
+
+	if (animation_running) {
+		animation_fill += interval/1000.0;
+
+		if (!animation->frame(interval/1000.0)) {
+			animation_fill = 0.0;
+			if (!animation->next()) {
+				printf("stop!\n");
+				animation_running = false;
+			}
+		}
+	}
+
 	if (angle_x>360) angle_x-=360;
 	if (angle_x>360) angle_x+=360;
 	if (angle_y>360) angle_y-=360;
@@ -257,7 +272,8 @@ void keyDown(unsigned char c, int x, int y) {
   try {
   switch(c) {
 		case '`':
-			animation->frame();
+			animation->start()->next();
+			animation_running = true;
 			break;
     case '-':
       zoom += 0.5f;
@@ -412,8 +428,10 @@ int main(int argc, char* argv[]) {
 					 ->keyframe()
 
 					 ->move(root->bone(11), glm::vec3(0.0f, -30.0f, 0.0f))
+					 ->keyframe()
+
+					 ->move(root->bone(1), glm::vec3(0.0f, 0.0f, 45.0f))
 					 ->keyframe();
-	animation->start();
 
   glutMainLoop();
 
