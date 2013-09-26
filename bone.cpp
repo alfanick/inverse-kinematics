@@ -1,12 +1,18 @@
 #include "bone.h"
-#define PI 3.14159265
-#define RAD(angle) (float)angle*PI/180.0
+#include "helpers.h"
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
+#include "glm/gtc/quaternion.hpp"
+#include "glm/gtx/quaternion.hpp"
+#include <cstdio>
 
 Bone::Bone(float l) {
   length = l;
   M = glm::mat4(1.0f);
   parent = NULL;
   rotation = glm::vec3(0.0f);
+  coordinates = glm::vec3(0.0f);
   constraint[0] = glm::vec3(-360.0f);
   constraint[1] = glm::vec3(360.0f);
 };
@@ -25,15 +31,22 @@ void Bone::remove(Bone *b) {
 	delete b;
 }
 
-glm::vec3 Bone::getEndPosition() {
+glm::vec4 Bone::getEndPosition() {
+  glm::vec4 endPosition;
   if(parent == NULL) {
-    return glm::vec3(0.0f, 0.0f, 0.0f);
+    endPosition = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
   }
-  glm::vec3 parentPosition = parent->getEndPosition();
-  float x = parentPosition.x + length*cos(RAD(rotation.x));
-  float y = parentPosition.y + length*cos(RAD(rotation.y));
-  float z = parentPosition.z + length*cos(RAD(rotation.z));
-  return glm::vec3(x,y,z);
+  else {
+    endPosition = parent->getEndPosition();
+  }
+
+  glm::mat4 A(1.0f);
+  glm::quat rot(glm::vec3(RAD(rotation.x), RAD(rotation.y), RAD(rotation.z)));
+  A = glm::translate(A, glm::vec3(0.0f, 0.0f, length));
+
+  endPosition = A*(rot*endPosition);
+
+  return endPosition;
 }
 
 Bone* Bone::constraints(float nx, float mx, float ny, float my, float nz, float mz) {
