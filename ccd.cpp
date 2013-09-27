@@ -23,7 +23,7 @@ void ccd::findNewAngles(Bone *endEffector, vec3 target, int iterations) {
 
       vec3 tmp = vec3(endEffector->getEndPosition());
       tmp.x -= target.x; tmp.y -= target.y; tmp.z -= target.z;
-      if(dot(tmp, tmp) < 0.01) {
+      if(dot(tmp, tmp) < 0.001) {
         found = true;
         printf("found\n");
       }
