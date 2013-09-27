@@ -41,6 +41,7 @@ Movement* Movement::set(Bone* root) {
     set(*it);
   }
 
+
   return this;
 }
 
@@ -64,11 +65,26 @@ bool Movement::frame(float fill, Bone* root) {
   }
 
   int c = 0;
+  int d = 0;
   Bone* current;
 
   for (std::map<unsigned long long,glm::vec3>::iterator kv = sequence[position].begin(); kv != sequence[position].end(); ++kv) {
     glm::vec3 dv = glm::abs(sequence[position-1][kv->first] - kv->second);
+/*
+    if (dv.x > 180)
+      dv.x = 360 - dv.x;
+
+    if (dv.y > 180)
+      dv.y = 360 - dv.y;
+
+    if (dv.z > 180)
+      dv.z = 360 - dv.z;
+*/
     glm::vec3 s = sgn(sequence[position-1][kv->first], kv->second);
+
+    //d += fabs(dv.x) < 0.01f;
+    //d += fabs(dv.y) < 0.01f;
+    //d += fabs(dv.z) < 0.01f;
 
     dv.x *= s.x * fill;
     dv.y *= s.y * fill;
@@ -77,6 +93,8 @@ bool Movement::frame(float fill, Bone* root) {
     moved[position][kv->first] += glm::abs(dv);
     current = root->bone(kv->first);
 
+    d+=3;
+
     if (glm::abs(moved[position][kv->first]).x >= glm::abs(sequence[position-1][kv->first] - kv->second).x) {
       c++;
     } else {
@@ -84,19 +102,20 @@ bool Movement::frame(float fill, Bone* root) {
     }
 
     if (glm::abs(moved[position][kv->first]).y >= glm::abs(sequence[position-1][kv->first] - kv->second).y) {
-      c++;
+        c++;
     } else {
       current->rotate(0, dv.y, 0);
     }
 
     if (glm::abs(moved[position][kv->first]).z >= glm::abs(sequence[position-1][kv->first] - kv->second).z) {
-      c++;
+        c++;
     } else {
       current->rotate(0, 0, dv.z);
     }
   }
 
-  return c <= sequence[position].size() * 3;
+  printf("c=%d, d=%d\n", c,d);
+  return c < d;
 }
 
 bool Movement::next() {

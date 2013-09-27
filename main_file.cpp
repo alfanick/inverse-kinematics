@@ -40,9 +40,9 @@ Bone* root;
 float r_up = 60.0f;
 
 void randomizeTarget() {
-  target.x = float(rand() % 2000) / 400.0;// - 4.0;
-  target.y = float(rand() % 2000) / 400.0;// - 4.0;
-  target.z = float(rand() % 2000) / 400.0;// - 4.0;
+  target.x = float(rand() % 10000) / 2000.0;
+  target.y = float(rand() % 10000) / 2000.0;
+  target.z = float(rand() % 10000) / 2000.0;
 
   GLfloat light_position[] = { target.x, target.y, target.z, 1.0 };
 
@@ -373,7 +373,10 @@ void keyUp(unsigned char c, int x, int y) {
       animation = new Movement();
 
       animation->set(root)->keyframe();
-      animation->set(b)->keyframe();
+
+      for (int z = effector; z != 0; z /= 10) {
+        animation->set(b->bone(z), b->bone(z)->rotation)->keyframe();
+      }
 
       delete b;
 
@@ -427,12 +430,12 @@ int main(int argc, char* argv[]) {
   // root->add(new Bone(3.5))->constraints(-90,90, -90,90, -360,360)->rotate(0, 0, 0)
   //     ->add(new Bone(4))->rotate(0, -75, 0)
   //     ->add(new Bone(1))->rotate(0, -45, 0);
-	//  effector = 11111111;
+	//  effector = 111;
   root->add(new Bone(1))->add(new Bone(1))->rotate(0,10,0)
-      ->add(new Bone(1))->rotate(0,10,0)->constraints(-135.0f, 135.0f, -135.0f, 135.0f, -135.0f, 135.0f)
-      ->add(new Bone(1))->rotate(0,10,0)->constraints(-135.0f, 135.0f, -135.0f, 135.0f, -135.0f, 135.0f)
-      ->add(new Bone(1))->rotate(0,10,0)->constraints(-135.0f, 135.0f, -135.0f, 135.0f, -135.0f, 135.0f)
-      ->add(new Bone(1))->rotate(0,10,0)->add(new Bone(1))->rotate(0,10,0)->add(new Bone(1))->rotate(0,10,0);->constraints(-135.0f, 135.0f, -135.0f, 135.0f, -135.0f, 135.0f)
+      ->add(new Bone(1))->rotate(0,10,0)
+      ->add(new Bone(1))->rotate(0,10,0)
+      ->add(new Bone(1))->rotate(0,10,0)
+      ->add(new Bone(1))->rotate(0,10,0)->add(new Bone(1))->rotate(0,10,0)->add(new Bone(1))->rotate(0,10,0);
 
 	effector = 11111111;
 
