@@ -360,6 +360,9 @@ void displayVec3(glm::vec4 vec) {
 
 void keyUp(unsigned char c, int x, int y) {
   switch(c) {
+    case '.':
+      ccd::findNewAngles(root->bone(effector), target);
+      break;
     case ',':
       Bone *b = new Bone(*root);
 
