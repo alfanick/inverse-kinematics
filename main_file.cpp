@@ -8,6 +8,7 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
+#include <time.h>
 
 #include "helpers.h"
 #include "bone.h"
@@ -39,9 +40,9 @@ Bone* root;
 float r_up = 60.0f;
 
 void randomizeTarget() {
-  target.x = float(rand() % 8000) / 800.0 - 4.0;
-  target.y = float(rand() % 8000) / 800.0 - 4.0;
-  target.z = float(rand() % 8000) / 800.0 - 4.0;
+  target.x = float(rand() % 2000) / 400.0;// - 4.0;
+  target.y = float(rand() % 2000) / 400.0;// - 4.0;
+  target.z = float(rand() % 2000) / 400.0;// - 4.0;
 
   GLfloat light_position[] = { target.x, target.y, target.z, 1.0 };
 
@@ -360,6 +361,9 @@ void displayVec3(glm::vec4 vec) {
 
 void keyUp(unsigned char c, int x, int y) {
   switch(c) {
+    case '.':
+      ccd::findNewAngles(root->bone(effector), target);
+      break;
     case ',':
       Bone *b = new Bone(*root);
 
