@@ -429,10 +429,10 @@ int main(int argc, char* argv[]) {
   //     ->add(new Bone(1))->rotate(0, -45, 0);
 	//  effector = 11111111;
   root->add(new Bone(1))->add(new Bone(1))->rotate(0,10,0)
-      ->add(new Bone(1))->rotate(0,10,0)
-      ->add(new Bone(1))->rotate(0,10,0)
-      ->add(new Bone(1))->rotate(0,10,0)
-      ->add(new Bone(1))->rotate(0,10,0)->add(new Bone(1))->rotate(0,10,0)->add(new Bone(1))->rotate(0,10,0);
+      ->add(new Bone(1))->rotate(0,10,0)->constraints(-135.0f, 135.0f, -135.0f, 135.0f, -135.0f, 135.0f)
+      ->add(new Bone(1))->rotate(0,10,0)->constraints(-135.0f, 135.0f, -135.0f, 135.0f, -135.0f, 135.0f)
+      ->add(new Bone(1))->rotate(0,10,0)->constraints(-135.0f, 135.0f, -135.0f, 135.0f, -135.0f, 135.0f)
+      ->add(new Bone(1))->rotate(0,10,0)->add(new Bone(1))->rotate(0,10,0)->add(new Bone(1))->rotate(0,10,0);->constraints(-135.0f, 135.0f, -135.0f, 135.0f, -135.0f, 135.0f)
 
 	effector = 11111111;
 
